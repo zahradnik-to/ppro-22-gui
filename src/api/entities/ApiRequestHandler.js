@@ -1,7 +1,7 @@
 import CatFactEntity from "./CatFactEntity";
 
-const EntityRequestHandler = {
+const ApiRequestHandler = {
   CatFact: CatFactEntity
 }
 
-export default EntityRequestHandler;
+export default ApiRequestHandler;

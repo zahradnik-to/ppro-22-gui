@@ -1,5 +1,5 @@
-import useApiResult from "./useApiResult";
-import RequestHandler from "../entities/EntityRequestHandler";
+import RequestHandler from "./entities/ApiRequestHandler";
+import useApiResult from "./hooks/useApiResult";
 
 function useFacts() {
   const request = RequestHandler.CatFact.Get;
