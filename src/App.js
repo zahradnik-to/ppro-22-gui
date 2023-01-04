@@ -2,9 +2,11 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./Layout";
 import HomePage from "./routes/HomePage";
 import AboutPage from "./routes/AboutPage";
-import DashboardPage from "./routes/DashboardPage";
+import CatalogPage from "./routes/CatalogPage";
 import ContactPage from "./routes/ContactPage";
 import BlankPage from "./routes/BlankPage";
+
+
 
 function App() {
   return (
@@ -12,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="catalog" element={<CatalogPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
 

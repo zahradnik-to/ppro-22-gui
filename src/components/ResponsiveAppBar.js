@@ -14,10 +14,12 @@ import MenuItem from '@mui/material/MenuItem';
 import RocketLaunch from "@mui/icons-material/RocketLaunch";
 import { NavLink } from "react-router-dom";
 
+import "./ResponsiveAppBar.css";
+
 const pages = [
   {
-    name: "Dashboard",
-    url: "/dashboard"
+    name: "Catalog",
+    url: "/catalog"
   },
   {
     name: "About",
@@ -28,7 +30,7 @@ const pages = [
     url: "/contact"
   },
 ]
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -50,7 +52,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className={"top-app-bar"}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <RocketLaunch sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

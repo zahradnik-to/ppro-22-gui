@@ -10,16 +10,33 @@ import '@fontsource/roboto/700.css';
 import {BrowserRouter} from "react-router-dom";
 import App from "./App";
 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    type: 'light',
+    primary: {
+      main: '#4D774E',
+      light: '#9DC88D',
+      dark: '#164A41',
+    },
+    secondary: {
+      main: '#F1B24A',
+    },
+  },
+});
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
     {/*<React.StrictMode>*/}
     <CssBaseline/>
-    <BrowserRouter>
-      <App/>
-    </BrowserRouter>
-
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <App/>
+      </BrowserRouter>
+    </ThemeProvider>
     {/*</React.StrictMode>*/}
   </>
 );
