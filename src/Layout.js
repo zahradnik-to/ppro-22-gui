@@ -8,7 +8,7 @@ function Layout() {
   return(
     <>
       <ResponsiveAppBar/>
-      <Box mt={2}>
+      <Box my={2}>
         <Container>
           <Outlet />
         </Container>
