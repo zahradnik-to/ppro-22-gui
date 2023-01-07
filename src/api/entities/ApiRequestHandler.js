@@ -1,7 +1,7 @@
-import CatFactEntity from "./CatFactEntity";
+import EventEntity from "./EventEntity";
 
 const ApiRequestHandler = {
-  CatFact: CatFactEntity
+  Event: EventEntity
 }
 
 export default ApiRequestHandler;

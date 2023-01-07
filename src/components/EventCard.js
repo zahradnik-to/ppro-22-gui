@@ -5,18 +5,27 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import CardActionArea from "@mui/material/CardActionArea";
+import { useNavigate } from "react-router-dom";
 
 EventCard.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
 };
 
-export default function EventCard({name, description, image, price}) {
+// Todo Props should probably expect full Event object instead of parts
+export default function EventCard({id, name, description, image, price}) {
+  const navigate = useNavigate();
+
+  const handleCardOnClick = () => {
+    navigate(`/event/${id}`)
+  }
+
   return(
     <Card>
-      <CardActionArea onClick={() => console.log(name)}>
+      <CardActionArea onClick={() => handleCardOnClick()}>
       <Badge
         color="secondary"
         badgeContent={`${price} Kč`} showZero
