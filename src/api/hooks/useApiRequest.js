@@ -9,7 +9,7 @@ import {BASE_URL} from '../apiConstants';
  * @param request Axios request config.
  * @return {[result,error]}
  */
-const useApiResult = (request) => {
+const useApiRequest = (request) => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -41,4 +41,4 @@ const useApiResult = (request) => {
   return [results, loaded, error];
 };
 
-export default useApiResult;
+export default useApiRequest;

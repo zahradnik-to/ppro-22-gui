@@ -1,5 +1,5 @@
 import RequestHandler from "./entities/ApiRequestHandler";
-import useApiResult from "./hooks/useApiResult";
+import useApiRequest from "./hooks/useApiRequest";
 
 /**
  * @param params
@@ -8,7 +8,7 @@ import useApiResult from "./hooks/useApiResult";
 export function useGetEvent(params) {
   const request = RequestHandler.Event.Get;
   if (params) request.params = params;
-  return useApiResult(request)
+  return useApiRequest(request)
 }
 
 /**
@@ -18,23 +18,27 @@ export function useGetEvent(params) {
 export function useListEvents(data) {
   const request = RequestHandler.Event.List;
   if (data) request.data = data
-  return useApiResult(request)
+  return useApiRequest(request)
 }
 
-export function useCreateEvents(data) {
+export function useCreateEvent(data) {
   const request = RequestHandler.Event.List;
   if (data) request.data = data
-  return useApiResult(request)
+  return useApiRequest(request)
 }
 
-export function useUpdateEvents(data) {
+export function useUpdateEvent(data) {
   const request = RequestHandler.Event.List;
-  if (data) request.data = data
-  return useApiResult(request)
+  if (data) {
+    // Delete null values from data
+    Object.keys(data).forEach((k) => data[k] == null && delete data[k]);
+    if (data) request.data = data
+  }
+  return useApiRequest(request)
 }
 
-export function useDeleteEvents(data) {
+export function useDeleteEvent(data) {
   const request = RequestHandler.Event.List;
   if (data) request.data = data
-  return useApiResult(request)
+  return useApiRequest(request)
 }

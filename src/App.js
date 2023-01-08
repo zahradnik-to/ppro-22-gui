@@ -6,6 +6,7 @@ import CatalogPage from "./routes/CatalogPage";
 import ContactPage from "./routes/ContactPage";
 import BlankPage from "./routes/BlankPage";
 import EventDetailPage from "./routes/EventDetailPage";
+import EventUpdatePage from "./routes/EventUpdatePage";
 
 
 
@@ -20,8 +21,8 @@ function App() {
           <Route path="contact" element={<ContactPage />} />
 
           <Route path="event/:id" element={<EventDetailPage />} />
-          <Route path="event/create" element={<EventDetailPage />} />
-          <Route path="event/update" element={<EventDetailPage />} />
+          {/*<Route path="event/create" element={<EventCreatePage />} />*/}
+          <Route path="event/:id/update" element={<EventUpdatePage />} />
 
           <Route path="*" element={<BlankPage />} />
         </Route>
