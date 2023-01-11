@@ -16,19 +16,20 @@ export default function EventUpdatePage() {
 
   const { id } = useParams();
   let [event, loaded, error] = useGetEvent({id});
+  let [updateResult, _, updateError, executeUpdate] = useUpdateEvent();
   event = getMockEvent();
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const updatedEvent = {
-      name,
-      price,
+      name: "asd",
+      price: 123,
       descriptionShort,
       descriptionLong,
       address,
       image,
     }
-    useUpdateEvent(updatedEvent);
+    executeUpdate(updatedEvent);
   }
 
   const handleImageChange = (newImage) => {

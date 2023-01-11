@@ -1,5 +1,5 @@
 import RequestHandler from "./entities/ApiRequestHandler";
-import useApiRequest from "./hooks/useApiRequest";
+import {useApiGetRequest, useApiPostRequest} from "./hooks/useApiRequest";
 
 /**
  * @param params
@@ -8,7 +8,7 @@ import useApiRequest from "./hooks/useApiRequest";
 export function useGetEvent(params) {
   const request = RequestHandler.Event.Get;
   if (params) request.params = params;
-  return useApiRequest(request)
+  return useApiGetRequest(request)
 }
 
 /**
@@ -18,27 +18,22 @@ export function useGetEvent(params) {
 export function useListEvents(data) {
   const request = RequestHandler.Event.List;
   if (data) request.data = data
-  return useApiRequest(request)
+  return useApiPostRequest(request)
 }
 
 export function useCreateEvent(data) {
-  const request = RequestHandler.Event.List;
+  const request = RequestHandler.Event.Create;
   if (data) request.data = data
-  return useApiRequest(request)
+  return useApiPostRequest(request)
 }
 
-export function useUpdateEvent(data) {
-  const request = RequestHandler.Event.List;
-  if (data) {
-    // Delete null values from data
-    Object.keys(data).forEach((k) => data[k] == null && delete data[k]);
-    if (data) request.data = data
-  }
-  return useApiRequest(request)
+export function useUpdateEvent() {
+  const request = RequestHandler.Event.Update;
+  return useApiPostRequest(request)
 }
 
 export function useDeleteEvent(data) {
-  const request = RequestHandler.Event.List;
+  const request = RequestHandler.Event.Delete;
   if (data) request.data = data
-  return useApiRequest(request)
+  return useApiPostRequest(request)
 }
