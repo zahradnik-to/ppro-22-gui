@@ -8,7 +8,6 @@ import {useState} from "react";
 
 export default function EventUpdatePage() {
   const [name, setName] = useState(null);
-  const [price, setPrice] = useState(null);
   const [descriptionShort, setDescriptionShort] = useState(null);
   const [descriptionLong, setDescriptionLong] = useState(null);
   const [address, setAddress] = useState(null);
@@ -22,8 +21,7 @@ export default function EventUpdatePage() {
   const handleSubmit = (e) => {
     e.preventDefault()
     const updatedEvent = {
-      name: "asd",
-      price: 123,
+      name,
       descriptionShort,
       descriptionLong,
       address,
@@ -39,14 +37,15 @@ export default function EventUpdatePage() {
   return (
     <Box
       component='form'
-      noValidate
-      autoComplete="off"
       onSubmit={handleSubmit}
+      autoComplete="off"
+      noValidate
       mx={2}
     >
       <Typography gutterBottom variant={"h3"} component="h1">Update event</Typography>
       <TextField sx={{my: 2}} fullWidth variant="outlined" label="Name" defaultValue={event.name} onChange={(e) => setName(e.target.value)} />
-      <TextField sx={{my: 2}} fullWidth variant="outlined" label="Price" defaultValue={event.price} type="number" inputProps={{ min: 1}} onChange={(e) => setPrice(e.target.value)}/>
+      {/* TODO Add price input to variant form */}
+      {/*<TextField sx={{my: 2}} fullWidth variant="outlined" label="Price" defaultValue={event.price} type="number" inputProps={{ min: 1}} onChange={(e) => setPrice(e.target.value)}/>*/}
       <TextField sx={{my: 2}} fullWidth variant="outlined" label="Address" defaultValue={event.address} onChange={(e) => setAddress(e.target.value)} />
       <MuiFileInput sx={{my: 2}} fullWidth variant="outlined" label={"Image"} value={image} onChange={handleImageChange} placeholder={event.image} inputProps={{ accept: "image/*"}} />
       <TextField sx={{my: 2}} fullWidth variant="outlined" label="Short description" defaultValue={event.descriptionShort} multiline minRows={1} onChange={(e) => setDescriptionShort(e.target.value)}/>

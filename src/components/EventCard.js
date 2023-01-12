@@ -28,7 +28,8 @@ export default function EventCard({id, name, description, image, price}) {
       <CardActionArea onClick={() => handleCardOnClick()}>
       <Badge
         color="secondary"
-        badgeContent={`${price} Kč`} showZero
+        badgeContent={`${price} €`}
+        showZero
         overlap="circular"
       >
         <CardMedia

@@ -23,6 +23,7 @@ function App() {
           <Route path="event/:id" element={<EventDetailPage />} />
           {/*<Route path="event/create" element={<EventCreatePage />} />*/}
           <Route path="event/:id/update" element={<EventUpdatePage />} />
+          <Route path="event/:id/managePackages" element={<EventUpdatePage />} />
 
           <Route path="*" element={<BlankPage />} />
         </Route>

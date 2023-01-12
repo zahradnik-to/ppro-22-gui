@@ -13,22 +13,24 @@ export function getMockEvent() {
       'Proin turpis nisl, consectetur sed magna sit amet, tempus eleifend nisl. Maecenas viverra ligula lectus, in egestas tellus eleifend et. Praesent ut lectus tristique, mattis est sit amet, ornare ligula. Nam vehicula, metus et dapibus mattis, turpis lacus egestas dui, semper molestie justo lorem eu sapien. Quisque commodo ligula vel libero lobortis, sed vulputate diam eleifend. Donec lacinia a diam scelerisque ultrices. Sed condimentum purus vel neque eleifend, at mattis arcu consequat. Integer at lectus in velit semper venenatis eu at sem. Aenean ut finibus odio. Suspendisse suscipit, arcu eu commodo volutpat, felis orci sollicitudin risus, et pharetra risus nunc eu urna.\n' +
       '\n' +
       'Fusce non condimentum arcu. Nullam cursus hendrerit vehicula. Aliquam congue fermentum risus eget finibus. Fusce vulputate, ligula gravida posuere auctor, justo arcu ultricies turpis, eu tempus turpis urna vel dui. Quisque suscipit enim id mi viverra, eget congue ipsum pretium. Vestibulum sodales lobortis mauris, sed mollis elit aliquam et. Duis pretium sit amet ipsum sit amet consectetur. Donec congue tortor sed mattis laoreet. Quisque eget venenatis dolor, id accumsan risus.',
-    price: 2599,
     address: 'Hradec Králové',
     image: 'https://picsum.photos/400/250',
     offeredPackages: [
       {
         id: '1fd',
+        price: 2599,
         startDate: '2023-05-18T00:00:00Z',
         endDate: '2025-05-19T00:00:00Z',
       },
       {
         id: '2fd',
+        price: 2599,
         startDate: '2023-08-18T00:00:00Z',
         endDate: '2025-05-19T00:00:00Z',
       },
       {
         id: '3fd',
+        price: 2599,
         startDate: '2025-05-18T00:00:00Z',
         endDate: '2025-05-19T00:00:00Z',
       }
