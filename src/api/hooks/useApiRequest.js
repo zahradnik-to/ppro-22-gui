@@ -8,57 +8,57 @@ import {BASE_URL} from '../apiConstants';
 /**
  * Hook for calling get requests on api. Fetches data on page load.
  * @param request Axios request config.
- * @return {[result, loaded, error]}
+ * @param mockedResult If supplied, will return this result first
+ * @return [result, loaded, error, setResult]
  */
-export function useApiGetRequest(request){
+export function useApiGetRequest(request, mockedResult){
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // Todo get rid of error
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    callApi(request, setResult, setError, setLoaded)
+    console.log("useApiGetRequest", request)
+    callApi(request, setResult, setError, setLoaded, mockedResult)
   }, [request]);
 
-  return [result, loaded, error];
-};
-
+  return [result, loaded, error, setResult];
+}
 
 /**
  * Hook for calling post, put, delete requests on api. Hook provides reference to call api.
  * @param request Axios request config.
- * @return {[result, loaded, error]}
+ * @return {[result, loaded, error, executeCall]}
  */
 export function useApiPostRequest(request) {
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState({});
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-  const executeCall = useCallback((data) => {
+  const executeCall = useCallback(async (data, mockedResult) => {
     if (data) {
       // Delete null values from data
       Object.keys(data).forEach((k) => data[k] == null && delete data[k]);
       request.data = data
     }
     console.log("useApiPostRequest", request)
-    callApi(request, setResult, setError, setLoaded)
+    await callApi(request, setResult, setError, setLoaded, mockedResult)
   }, [])
 
   return [result, loaded, error, executeCall];
 }
 
-function callApi(request, setResult, setError, setLoaded) {
+async function callApi(request, setResult, setError, setLoaded, mockedResult) {
   request.baseURL = BASE_URL;
-  axios(request)
-    .then((response) => handleResponse(response, setResult, setError))
-    .catch((err) => setError(err.message))
-    .finally(() => setLoaded(true));
-}
-
-function handleResponse(response, setResult, setError) {
-  if (response.status === 200) {
-    setResult(response.data);
-    setError(null);
-  } else {
-    setError({status: response.status});
+  try {
+    const res = await axios(request);
+    if (mockedResult) setResult(mockedResult) // Todo delete mock
+    else setResult(res);
+    console.log("callApi: Axios result", res)
+  } catch (err) {
+    if (mockedResult) setResult(mockedResult) // Todo delete mock
+    else setError(err.message);
+    console.log("callApi: Axios error", err)
+  } finally {
+    setLoaded(true);
   }
 }

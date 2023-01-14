@@ -1,5 +1,6 @@
 import RequestHandler from "./entities/ApiRequestHandler";
 import {useApiGetRequest, useApiPostRequest} from "./hooks/useApiRequest";
+import {getMockEvent} from "../mock/mock-helper";
 
 /**
  * @param params
@@ -8,22 +9,21 @@ import {useApiGetRequest, useApiPostRequest} from "./hooks/useApiRequest";
 export function useGetEvent(params) {
   const request = RequestHandler.Event.Get;
   if (params) request.params = params;
-  return useApiGetRequest(request)
+  return useApiGetRequest(request, getMockEvent())
 }
 
 /**
  * @param data
  * @return {[ [{Event}] ,error]}
  */
-export function useListEvents(data) {
+export function useListEvents(params) {
   const request = RequestHandler.Event.List;
-  if (data) request.data = data
+  if (params) request.params = params;
   return useApiPostRequest(request)
 }
 
 export function useCreateEvent(data) {
   const request = RequestHandler.Event.Create;
-  if (data) request.data = data
   return useApiPostRequest(request)
 }
 
@@ -34,6 +34,5 @@ export function useUpdateEvent() {
 
 export function useDeleteEvent(data) {
   const request = RequestHandler.Event.Delete;
-  if (data) request.data = data
   return useApiPostRequest(request)
 }

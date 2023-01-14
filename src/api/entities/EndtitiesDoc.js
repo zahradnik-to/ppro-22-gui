@@ -10,12 +10,13 @@
  * @property {number} price
  * @property {string} address
  * @property {string} image
- * @property {[EventOfferedPackages]} offeredPackages
+ * @property {[Variant]} offeredPackages
  */
 
 /**
- * @typedef {Object} EventOfferedPackages
+ * @typedef {Object} Variant
  * @property {string} id
+ * @property {string} eventId
  * @property {string} startDate
  * @property {string} endDate
  */

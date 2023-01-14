@@ -7,6 +7,7 @@ import ContactPage from "./routes/ContactPage";
 import BlankPage from "./routes/BlankPage";
 import EventDetailPage from "./routes/EventDetailPage";
 import EventUpdatePage from "./routes/EventUpdatePage";
+import EventVariantsUpdatePage from "./routes/EventVariantsUpdatePage";
 
 
 
@@ -22,8 +23,8 @@ function App() {
 
           <Route path="event/:id" element={<EventDetailPage />} />
           {/*<Route path="event/create" element={<EventCreatePage />} />*/}
-          <Route path="event/:id/update" element={<EventUpdatePage />} />
-          <Route path="event/:id/managePackages" element={<EventUpdatePage />} />
+          <Route path="event/:id/edit" element={<EventUpdatePage />} />
+          <Route path="event/:id/editVariants" element={<EventVariantsUpdatePage />} />
 
           <Route path="*" element={<BlankPage />} />
         </Route>

@@ -11,8 +11,6 @@ import {
   Table, TableBody, TableContainer, TableHead, TableRow,
   Typography
 } from "@mui/material";
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import { styled } from '@mui/material/styles';
 import {useGetEvent} from "../api/useEvent";
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -23,27 +21,7 @@ import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
-import {getMockEvent} from '../mock/mock-helper'
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+import { StyledTableRow, StyledTableCell } from '../components/StyledTable';
 
 
 export default function EventDetailPage() {
@@ -51,25 +29,21 @@ export default function EventDetailPage() {
   const { id } = useParams();
   let [event, loaded, error] = useGetEvent({id: id});
 
-  // Todo delete this after fetching real event
-  event = getMockEvent();
-  console.log(event)
-
-  const handleBuyPackage = (id) => {
+  const handleBuyVariant = (id) => {
     console.log(`Trying to buy id: ${id}`)
     const data = {
       user: "userId",
       id, // bought package id
     }
-    // Todo call buy package hook with data
+    // Todo call buy variant hook with data
   }
 
   const handleEditEvent = () => {
-    navigate(`update`)
+    navigate(`edit`)
   }
 
-  const handleManagePackages = () => {
-    navigate(`managePackages`)
+  const handleEditVariants = () => {
+    navigate(`editVariants`)
   }
 
   const handleDeleteEvent = () => {
@@ -154,24 +128,24 @@ export default function EventDetailPage() {
       </Box><Divider/>
       <Box my={2}>
         <Box>
-          <Typography gutterBottom variant='h4' component='h2'>Available packages
+          <Typography gutterBottom variant='h4' component='h2'>Available variants
             {/* TODO Check if owner or admin */}
             {(true) &&
               <>
                 <Button
                   variant="outlined"
                   startIcon={<BuildIcon />}
-                  onClick={() => handleEditEvent()}
+                  onClick={() => handleEditVariants()}
                   sx={{marginLeft: "1em"}}
                 >
-                  Manage packages
+                  Manage variants
                 </Button>
               </>
             }
           </Typography>
         </Box>
-        <TableContainer>
 
+        <TableContainer>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
@@ -188,7 +162,7 @@ export default function EventDetailPage() {
                   <StyledTableCell component="th" scope="row">{`${format(new Date(pcg.endDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{`${pcg.price}€`}</StyledTableCell>
                   <StyledTableCell align="right">
-                    <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleBuyPackage(pcg.id)}>
+                    <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleBuyVariant(pcg.id)}>
                       Buy
                     </Button>
                   </StyledTableCell>

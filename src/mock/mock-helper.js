@@ -18,21 +18,27 @@ export function getMockEvent() {
     offeredPackages: [
       {
         id: '1fd',
-        price: 2599,
+        price: 1111,
         startDate: '2023-05-18T00:00:00Z',
-        endDate: '2025-05-19T00:00:00Z',
+        endDate: '2023-05-19T00:00:00Z',
       },
       {
         id: '2fd',
-        price: 2599,
-        startDate: '2023-08-18T00:00:00Z',
-        endDate: '2025-05-19T00:00:00Z',
+        price: 2222,
+        startDate: '2023-08-20T00:00:00Z',
+        endDate: '2023-05-22T00:00:00Z',
       },
       {
         id: '3fd',
-        price: 2599,
-        startDate: '2025-05-18T00:00:00Z',
-        endDate: '2025-05-19T00:00:00Z',
+        price: 3333,
+        startDate: '2025-05-13T00:00:00Z',
+        endDate: '2025-05-15T00:00:00Z',
+      },
+      {
+        id: '4fd',
+        price: 4444,
+        startDate: '2023-10-13T00:00:00Z',
+        endDate: '2023-10-15T00:00:00Z',
       }
     ]
   }

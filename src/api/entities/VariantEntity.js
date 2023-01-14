@@ -1,4 +1,4 @@
-const URL = 'event';
+const URL = 'variant';
 
 const Get = {
   url: `${URL}/get`,

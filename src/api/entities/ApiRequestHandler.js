@@ -1,7 +1,9 @@
 import EventEntity from "./EventEntity";
+import VariantEntity from "./VariantEntity";
 
 const ApiRequestHandler = {
-  Event: EventEntity
+  Event: EventEntity,
+  Variant: VariantEntity,
 }
 
 export default ApiRequestHandler;
