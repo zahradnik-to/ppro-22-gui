@@ -31,6 +31,7 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
 
   // Should react after handleDeleteVariant function completes call
   useEffect(() =>{
+    if (!deleteLoaded) return
     if (deleteResult.hasOwnProperty('error') || deleteError) return;
     setVariants(removeObjectFromArray(variants, deleteResult.id));
   }, [deleteResult])
@@ -43,7 +44,9 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
   }, [createResult])
 
   useEffect(() =>{
-    console.log({createError, updateError, deleteError})
+    if (createError || updateError || deleteError){
+      console.error("ERROR OCCURRED IN COMPONENT", {createError, updateError, deleteError})
+    }
   }, [createError, updateError, deleteError])
 
   const handleDateChange = (id, objProperty, value) => {

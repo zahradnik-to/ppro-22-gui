@@ -13,12 +13,13 @@ import {BASE_URL} from '../apiConstants';
  */
 export function useApiGetRequest(request, mockedResult){
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null); // Todo get rid of error
+  const [error, setError] = useState(null); // Todo get rid of error? Check for errors only in response?
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     console.log("useApiGetRequest", request)
     callApi(request, setResult, setError, setLoaded, mockedResult)
+      .catch((e) => console.log(e))
   }, [request]);
 
   return [result, loaded, error, setResult];
@@ -42,6 +43,7 @@ export function useApiPostRequest(request) {
     }
     console.log("useApiPostRequest", request)
     await callApi(request, setResult, setError, setLoaded, mockedResult)
+      .catch(e => console.log(e))
   }, [])
 
   return [result, loaded, error, executeCall];
@@ -49,6 +51,8 @@ export function useApiPostRequest(request) {
 
 async function callApi(request, setResult, setError, setLoaded, mockedResult) {
   request.baseURL = BASE_URL;
+  request.withCredentials = true;
+  let error;
   try {
     const res = await axios(request);
     if (mockedResult) setResult(mockedResult) // Todo delete mock
@@ -60,5 +64,6 @@ async function callApi(request, setResult, setError, setLoaded, mockedResult) {
     console.log("callApi: Axios error", err)
   } finally {
     setLoaded(true);
+    return Promise.resolve();
   }
 }

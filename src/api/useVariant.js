@@ -22,7 +22,7 @@ export function useListVariants(data) {
   return useApiGetRequest(request, getMockEvent().offeredPackages)
 }
 
-export function useCreateVariant(data) {
+export function useCreateVariant() {
   const request = RequestHandler.Variant.Create;
   return useApiPostRequest(request)
 }
@@ -33,7 +33,7 @@ export function useUpdateManyVariants() {
   return useApiPostRequest(request)
 }
 
-export function useDeleteVariant(data) {
+export function useDeleteVariant() {
   const request = RequestHandler.Variant.Delete;
   return useApiPostRequest(request);
 }

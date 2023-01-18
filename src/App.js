@@ -8,28 +8,36 @@ import BlankPage from "./routes/BlankPage";
 import EventDetailPage from "./routes/EventDetailPage";
 import EventUpdatePage from "./routes/EventUpdatePage";
 import EventVariantsUpdatePage from "./routes/EventVariantsUpdatePage";
-
+import UserAccessPage from "./routes/UserAccessPage";
+import { AuthProvider } from "./context/AuthProvider";
+import RequireAuth from "./components/RequireAuth";
+import ErrorPage from "./routes/ErrorPage";
 
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="catalog" element={<CatalogPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="userAccess" element={<UserAccessPage />} />
 
           <Route path="event/:id" element={<EventDetailPage />} />
-          {/*<Route path="event/create" element={<EventCreatePage />} />*/}
-          <Route path="event/:id/edit" element={<EventUpdatePage />} />
-          <Route path="event/:id/editVariants" element={<EventVariantsUpdatePage />} />
 
+          <Route element={<RequireAuth allowedRoles={"admin"}/>}>
+            <Route path="event/create" element={<>TODO</>} />
+            <Route path="event/:id/edit" element={<EventUpdatePage />} />
+            <Route path="event/:id/editVariants" element={<EventVariantsUpdatePage />} />
+          </Route>
+
+          <Route path="unauthorized" element={<ErrorPage errStatus={401} errMessage={"You are not authorized to view this page."} />} />
           <Route path="*" element={<BlankPage />} />
         </Route>
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 function HomePage() {
   const navigate = useNavigate();
 
-  const redirectToSignUp = async () => {
-    navigate("/signUp");
+  const redirectRegister = async () => {
+    navigate("/register");
   };
 
-  const redirectLogIn = async () => {
+  const redirectLogin = async () => {
     navigate("/logIn");
   };
 
@@ -70,14 +70,14 @@ function HomePage() {
                   alt='sign up icon'
                   sx={{ width: 180, height: 180, border: '2px solid', borderColor: 'primary.main'}}
                   color='secondary'
-                  onClick={() => redirectToSignUp()}
+                  onClick={() => redirectRegister()}
                 >
                   <PersonAddAlt1Icon sx={{fontSize: '112px'}}/>
                 </IconButton>
               </Box>
               <Box component={'div'}>
                 <Typography mt={2} variant='h6' component={'div'}>
-                  Sign up!
+                  Register!
                 </Typography>
               </Box>
             </Box>
@@ -89,7 +89,7 @@ function HomePage() {
                   alt='log in icon'
                   sx={{ width: 180, height: 180, border: '2px solid', borderColor: 'primary.main'}}
                   color='secondary'
-                  onClick={() => redirectLogIn()}
+                  onClick={() => redirectLogin()}
                 >
                   <LoginIcon sx={{fontSize: '112px'}}/>
                 </IconButton>

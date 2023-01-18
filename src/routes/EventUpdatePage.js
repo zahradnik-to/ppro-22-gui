@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useGetEvent, useUpdateEvent} from "../api/useEvent";
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, LinearProgress, TextField, Typography} from "@mui/material";
 import {MuiFileInput} from "mui-file-input";
 import {useState} from "react";
 
@@ -12,7 +12,7 @@ export default function EventUpdatePage() {
   const [address, setAddress] = useState(null);
   const [image, setImage] = useState(null);
 
-  const [event, loaded, error] = useGetEvent({id});
+  const [event, eventLoaded, error] = useGetEvent({id});
   const [updateResult, _, updateError, executeUpdate] = useUpdateEvent();
 
   const handleSubmit = (e) => {
@@ -29,6 +29,10 @@ export default function EventUpdatePage() {
 
   const handleImageChange = (newImage) => {
     setImage(newImage);
+  }
+
+  if (!eventLoaded) {
+    return <LinearProgress color="secondary"/>
   }
 
   return (

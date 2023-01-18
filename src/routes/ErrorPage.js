@@ -1,13 +1,19 @@
-import { useRouteError } from "react-router-dom";
+import PropTypes from "prop-types";
 
-function ErrorPage() {
-  const error = useRouteError();
-  console.error(error);
+ErrorPage.propTypes = {
+  errStatus: PropTypes.number,
+  errMessage: PropTypes.string
+};
 
+ErrorPage.defaultProps = {
+  errMessage: "Unexpected error occured."
+};
+
+function ErrorPage({errStatus, errMessage}) {
   return (
     <div>
-      <h1>Error {error.status}</h1>
-      <p><i>{error.statusText || error.message}</i></p>
+      <h1>Error {errStatus}</h1>
+      <p><i>{errMessage}</i></p>
     </div>
   );
 }

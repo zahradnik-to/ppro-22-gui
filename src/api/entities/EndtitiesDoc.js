@@ -20,3 +20,11 @@
  * @property {string} startDate
  * @property {string} endDate
  */
+
+/**
+ * @typedef {Object} User
+ * @property {string} id
+ * @property {string} name
+ * @property {string} address // Todo address as object with city, street,... ?
+ * @property {Array[{string}]} roles
+ */
