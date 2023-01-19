@@ -1,4 +1,4 @@
-const URL = 'user';
+const URL = 'order';
 
 const Get = {
   url: `${URL}/get`,
@@ -7,16 +7,6 @@ const Get = {
 
 const List = {
   url: `${URL}/list`,
-  method: "post",
-}
-
-const Register = {
-  url: `/register`,
-  method: "post",
-}
-
-const Login = {
-  url: `/login`,
   method: "post",
 }
 
@@ -33,8 +23,6 @@ const Delete = {
 export default {
   Get,
   List,
-  Register,
-  Login,
   Update,
   Delete
 };

@@ -19,7 +19,7 @@ export function useApiGetRequest(request, mockedResult){
   useEffect(() => {
     console.log("useApiGetRequest", request)
     callApi(request, setResult, setError, setLoaded, mockedResult)
-      .catch((e) => console.log(e))
+      .catch((e) => console.log("Error during get call",e))
   }, [request]);
 
   return [result, loaded, error, setResult];
@@ -42,8 +42,7 @@ export function useApiPostRequest(request) {
       request.data = data
     }
     console.log("useApiPostRequest", request)
-    await callApi(request, setResult, setError, setLoaded, mockedResult)
-      .catch(e => console.log(e))
+    return callApi(request, setResult, setError, setLoaded, mockedResult)
   }, [])
 
   return [result, loaded, error, executeCall];
@@ -51,19 +50,19 @@ export function useApiPostRequest(request) {
 
 async function callApi(request, setResult, setError, setLoaded, mockedResult) {
   request.baseURL = BASE_URL;
-  request.withCredentials = true;
-  let error;
   try {
     const res = await axios(request);
+    console.log("Ahoj")
     if (mockedResult) setResult(mockedResult) // Todo delete mock
     else setResult(res);
     console.log("callApi: Axios result", res)
+    return Promise.resolve(res);
   } catch (err) {
     if (mockedResult) setResult(mockedResult) // Todo delete mock
-    else setError(err.message);
+    setError(err.message);
     console.log("callApi: Axios error", err)
+    return Promise.reject(err);
   } finally {
     setLoaded(true);
-    return Promise.resolve();
   }
 }

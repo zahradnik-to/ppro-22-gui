@@ -7,22 +7,25 @@ RegisterForm.propTypes = {
 };
 
 export default function RegisterForm({handleRegister}) {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [surname, setSurname] = useState("");
+  const [description, setDescription] = useState("");
+  // const [city, setCity] = useState(""); // Todo delete these?
+  // const [street, setStreet] = useState("");
+  // const [zipCode, setZipCode] = useState("");
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const newUser = {
-      email,
+      username,
       password,
       name,
-      city,
-      street,
-      zipCode,
+      email,
+      surname,
+      description,
     }
     handleRegister(newUser)
   }
@@ -36,6 +39,13 @@ export default function RegisterForm({handleRegister}) {
       <Typography gutterBottom variant={"h3"} component="h1">Register</Typography>
       <form onSubmit={handleFormSubmit}>
         <Stack spacing={1}>
+          <TextField
+            variant="outlined"
+            label="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
           <TextField
             variant="outlined"
             label="Email"
@@ -62,30 +72,45 @@ export default function RegisterForm({handleRegister}) {
             required
           />
           <TextField
-            ariant="outlined"
-            label="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            variant="outlined"
+            label="Surname"
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
             required
           />
           <TextField
-            ariant="outlined"
-            label="Street & No."
-            value={street}
-            onChange={(e) => setStreet(e.target.value)}
+            variant="outlined"
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
-          <TextField
-            ariant="outlined"
-            label="Zip code"
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
-            required
-          />
-          <Box display={"flex"} justifyContent={"flex-end"}>
-            <Button variant="contained" type={"submit"}>Register</Button>
-          </Box>
+          {/* TODO set address in user settings ??? */}
+          {/*<TextField*/}
+          {/*  ariant="outlined"*/}
+          {/*  label="City"*/}
+          {/*  value={city}*/}
+          {/*  onChange={(e) => setCity(e.target.value)}*/}
+          {/*  required*/}
+          {/*/>*/}
+          {/*<TextField*/}
+          {/*  ariant="outlined"*/}
+          {/*  label="Street & No."*/}
+          {/*  value={street}*/}
+          {/*  onChange={(e) => setStreet(e.target.value)}*/}
+          {/*  required*/}
+          {/*/>*/}
+          {/*<TextField*/}
+          {/*  ariant="outlined"*/}
+          {/*  label="Zip code"*/}
+          {/*  value={zipCode}*/}
+          {/*  onChange={(e) => setZipCode(e.target.value)}*/}
+          {/*  required*/}
+          {/*/>*/}
         </Stack>
+        <Box display={"flex"} justifyContent={"flex-end"}>
+          <Button variant="contained" type={"submit"}>Register</Button>
+        </Box>
       </form>
     </Box>
   )

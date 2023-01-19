@@ -1,3 +1,38 @@
+export function getMockOrders() {
+  return Array.from(Array(10)).map((_, index) => (
+    {
+      id: `${index}-id`,
+      variantId: 'var_1fd',
+      price: (index + 1) * 1310,
+      startDate: new Date(new Date() - Math.random()*(1e+12)),
+      endDate: new Date(new Date() - Math.random()*(1e+12)),
+    }
+  ))
+}
+
+export function getMockLoginResponse() {
+  return {
+    user: getMockUser(),
+    status: 200,
+    accessToken: "asdf1234",
+  }
+}
+
+export function getMockUser() {
+  return {
+    id: "123456asdf",
+    companyName: "John Doe Adventures, Inc.",
+    email: "mock@email.com",
+    name: "Mock Mockignton",
+    city: "Hradec Kralove",
+    street: "Vavřinecká 468",
+    zipCode: "555 66",
+    phone: "+420 456 123 789",
+    image: "https://picsum.photos/400/250",
+    roles: ["user", "admin", "seller"],
+  }
+}
+
 export function getMockEvent() {
   return {
     id: '1234abcdf1234abcfd',

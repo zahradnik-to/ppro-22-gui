@@ -170,7 +170,7 @@ export default function EventDetailPage() {
               ))}
             </TableBody>
           </Table>
-      </TableContainer>
+        </TableContainer>
       </Box>
       <Divider/>
       <Box my={2}>

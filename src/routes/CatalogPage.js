@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Grid";
 import EventCard from "../components/EventCard";
-import Box from "@mui/material/Box";
 
 function CatalogPage() {
   return (

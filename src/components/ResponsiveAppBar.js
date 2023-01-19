@@ -15,8 +15,7 @@ import RocketLaunch from "@mui/icons-material/RocketLaunch";
 import {NavLink, useNavigate} from "react-router-dom";
 
 import "./ResponsiveAppBar.css";
-import {useContext} from "react";
-import AuthProvider from "../context/AuthProvider";
+import useAuth from "../api/hooks/useAuth";
 
 const pages = [
   {
@@ -32,12 +31,21 @@ const pages = [
     url: "/contact"
   },
 ]
-const settings = ['Profile', 'My Events'];
+const accountMenu = [
+  {
+    name: "Profile",
+    url: "/user/profile"
+  },
+  {
+    name: "My orders",
+    url: "/user/my-orders"
+  },
+];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const {auth, setAuth} = useContext(AuthProvider);
+  const {auth, setAuth} = useAuth();
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -69,23 +77,23 @@ function ResponsiveAppBar() {
     <AppBar position="static" className={"top-app-bar"}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <RocketLaunch sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <RocketLaunch sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
           <Typography variant="h6" noWrap component={NavLink} to="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none !important',
-            }}
+                      sx={{
+                        mr: 2,
+                        display: {xs: 'none', md: 'flex'},
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none !important',
+                      }}
           >
             PPROMAT
           </Typography>
 
           {/* Mobile view appbar */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -94,7 +102,7 @@ function ResponsiveAppBar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              <MenuIcon/>
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -111,7 +119,7 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: {xs: 'block', md: 'none'},
               }}
             >
               {pages.map((page) => (
@@ -129,7 +137,7 @@ function ResponsiveAppBar() {
           </Box>
 
           <> {/* Mobile view Logo */}
-            <RocketLaunch sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+            <RocketLaunch sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
             <Typography
               variant="h5"
               noWrap
@@ -137,7 +145,7 @@ function ResponsiveAppBar() {
               href=""
               sx={{
                 mr: 2,
-                display: { xs: 'flex', md: 'none' },
+                display: {xs: 'flex', md: 'none'},
                 flexGrow: 1,
                 fontFamily: 'monospace',
                 fontWeight: 700,
@@ -152,12 +160,12 @@ function ResponsiveAppBar() {
 
 
           {/* List of pages. Hidden in xs */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
             {pages.map((page) => (
               <Button
                 key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{my: 2, color: 'white', display: 'block'}}
                 component={NavLink}
                 to={page.url}
               >
@@ -166,15 +174,15 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          { auth?.user &&
-            <Box sx={{ flexGrow: 0 }}>
+          {auth?.user &&
+            <Box sx={{flexGrow: 0}}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="User avatar" src="" />
+                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                  <Avatar alt="User avatar" src=""/>
                 </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: '45px' }}
+                sx={{mt: '45px'}}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -189,11 +197,19 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {accountMenu.map((item) => (
+                  <MenuItem
+                    key={item.name}
+                    onClick={handleCloseUserMenu}
+                    component={NavLink}
+                    to={item.url}
+                  >
+                    <Typography textAlign="center">{item.name}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem onClick={handleLogOut}>
+                  <Typography textAlign="center">My events</Typography>
+                </MenuItem>
                 <MenuItem onClick={handleLogOut}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
@@ -211,4 +227,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

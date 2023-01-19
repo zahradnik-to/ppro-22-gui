@@ -13,7 +13,7 @@ export default function LoginForm({handleLogin}) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const logUser = {
-      email,
+      username: email, // TODO login with username or email?
       password,
     }
     handleLogin(logUser)

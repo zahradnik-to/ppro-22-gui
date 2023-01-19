@@ -25,6 +25,11 @@
  * @typedef {Object} User
  * @property {string} id
  * @property {string} name
- * @property {string} address // Todo address as object with city, street,... ?
+ * @property {string} companyName
+ * @property {string} email
+ * @property {string} city
+ * @property {string} street
+ * @property {string} zipCode
+ * @property {string} phone
  * @property {Array[{string}]} roles
  */
