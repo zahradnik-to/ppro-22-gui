@@ -4,9 +4,10 @@ import {useState} from "react";
 
 LoginForm.propTypes = {
   handleLogin: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string,
 };
 
-export default function LoginForm({handleLogin}) {
+export default function LoginForm({handleLogin, errorMessage}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -47,10 +48,9 @@ export default function LoginForm({handleLogin}) {
             }}
             required
           />
-          <Box display={"flex"} justifyContent={"flex-end"}>
-          </Box>
+          <Button variant="contained" type="submit">Log In</Button>
+          <Typography color={"red"}>{errorMessage}</Typography>
         </Stack>
-        <Button variant="contained" type="submit">Log In</Button>
       </form>
     </Box>
   )

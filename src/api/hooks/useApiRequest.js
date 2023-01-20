@@ -52,7 +52,6 @@ async function callApi(request, setResult, setError, setLoaded, mockedResult) {
   request.baseURL = BASE_URL;
   try {
     const res = await axios(request);
-    console.log("Ahoj")
     if (mockedResult) setResult(mockedResult) // Todo delete mock
     else setResult(res);
     console.log("callApi: Axios result", res)

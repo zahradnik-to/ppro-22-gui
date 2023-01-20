@@ -3,6 +3,7 @@ const URL = 'user';
 const Get = {
   url: `${URL}/get`,
   method: "get",
+  withCredentials: true
 }
 
 const List = {
@@ -13,11 +14,19 @@ const List = {
 const Register = {
   url: `/register`,
   method: "post",
+  withCredentials: true
 }
 
 const Login = {
   url: `/login`,
   method: "post",
+  withCredentials: true
+}
+
+const Logout = {
+  url: `/logout`,
+  method: "post",
+  withCredentials: true
 }
 
 const Update = {
@@ -35,6 +44,7 @@ export default {
   List,
   Register,
   Login,
+  Logout,
   Update,
-  Delete
+  Delete,
 };

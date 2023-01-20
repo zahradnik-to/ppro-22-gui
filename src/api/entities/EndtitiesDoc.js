@@ -31,5 +31,5 @@
  * @property {string} street
  * @property {string} zipCode
  * @property {string} phone
- * @property {Array[{string}]} roles
+ * @property {Array[{string}]} role
  */

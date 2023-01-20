@@ -28,12 +28,12 @@ function App() {
 
           <Route path="event/:id" element={<EventDetailPage />} />
 
-          <Route element={<RequireAuth allowedRoles={"user"}/>}>
+          <Route element={<RequireAuth allowedRoles={"USER"}/>}>
             <Route path="user/profile" element={<UserProfilePage />} />
             <Route path="user/my-orders" element={<UserMyOrdersPage />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={"admin"}/>}>
+          <Route element={<RequireAuth allowedRoles={["SELLER","ADMIN"]}/>}>
             <Route path="event/create" element={<>TODO</>} />
             <Route path="event/:id/edit" element={<EventUpdatePage />} />
             <Route path="event/:id/editVariants" element={<EventVariantsUpdatePage />} />

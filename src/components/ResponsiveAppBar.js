@@ -16,6 +16,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 
 import "./ResponsiveAppBar.css";
 import useAuth from "../api/hooks/useAuth";
+import LogoutButton from "./LogoutButton";
 
 const pages = [
   {
@@ -66,11 +67,6 @@ function ResponsiveAppBar() {
   const handleUserAccessClick = () => {
     setAnchorElUser(null);
     navigate('/userAccess')
-  };
-
-  const handleLogOut = () => {
-    setAnchorElUser(null);
-    setAuth(null);
   };
 
   return (
@@ -176,9 +172,10 @@ function ResponsiveAppBar() {
 
           {auth?.user &&
             <Box sx={{flexGrow: 0}}>
+              {auth?.user?.username}
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                  <Avatar alt="User avatar" src=""/>
+                <IconButton onClick={handleOpenUserMenu} sx={{p: 0, ml: 1}}>
+                  <Avatar alt="User avatar" src={auth?.user?.image}/>
                 </IconButton>
               </Tooltip>
               <Menu
@@ -207,12 +204,16 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{item.name}</Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={handleLogOut}>
-                  <Typography textAlign="center">My events</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleLogOut}>
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
+                { auth?.user?.role?.includes("SELLER") &&
+                   <MenuItem
+                     onClick={handleCloseUserMenu}
+                     component={NavLink}
+                     to={'/my-events'}
+                   >
+                     <Typography textAlign="center">My events</Typography>
+                   </MenuItem>
+                }
+                <LogoutButton handleCloseUserMenu={handleCloseUserMenu}/>
               </Menu>
             </Box>
           }

@@ -21,6 +21,7 @@ export function getMockLoginResponse() {
 export function getMockUser() {
   return {
     id: "123456asdf",
+    userName: "mockedJohnDoe",
     companyName: "John Doe Adventures, Inc.",
     email: "mock@email.com",
     name: "Mock Mockignton",
@@ -29,7 +30,7 @@ export function getMockUser() {
     zipCode: "555 66",
     phone: "+420 456 123 789",
     image: "https://picsum.photos/400/250",
-    roles: ["user", "admin", "seller"],
+    role: ["USER", "ADMIN", "SELLER"],
   }
 }
 

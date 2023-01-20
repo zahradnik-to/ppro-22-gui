@@ -4,9 +4,10 @@ import PropTypes from "prop-types";
 
 RegisterForm.propTypes = {
   handleRegister: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string,
 };
 
-export default function RegisterForm({handleRegister}) {
+export default function RegisterForm({handleRegister, errorMessage}) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +31,7 @@ export default function RegisterForm({handleRegister}) {
     handleRegister(newUser)
   }
 
-  return(
+  return (
     <Box
       autoComplete="off"
       noValidate
@@ -107,10 +108,9 @@ export default function RegisterForm({handleRegister}) {
           {/*  onChange={(e) => setZipCode(e.target.value)}*/}
           {/*  required*/}
           {/*/>*/}
-        </Stack>
-        <Box display={"flex"} justifyContent={"flex-end"}>
           <Button variant="contained" type={"submit"}>Register</Button>
-        </Box>
+          <Typography color={"red"}>{errorMessage}</Typography>
+        </Stack>
       </form>
     </Box>
   )
