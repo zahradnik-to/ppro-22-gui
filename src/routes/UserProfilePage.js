@@ -66,7 +66,7 @@ function UserProfilePage() {
       <form onSubmit={handleSubmit}>
         <Typography gutterBottom variant={"h3"} component="h1">User: {getResult?.data?.user.username}</Typography>
         <TextField required sx={{my: 2}} fullWidth variant="outlined" label="Name" defaultValue={getResult?.data?.user.name} onChange={(e) => setName(e.target.value)} />
-        <TextField required sx={{my: 2}} fullWidth variant="outlined" label="Name" defaultValue={getResult?.data?.user.surname} onChange={(e) => setName(e.target.value)} />
+        <TextField required sx={{my: 2}} fullWidth variant="outlined" label="Surname" defaultValue={getResult?.data?.user.surname} onChange={(e) => setSurname(e.target.value)} />
         <TextField required sx={{my: 2}} fullWidth variant="outlined" label="Email" defaultValue={getResult?.data?.user.email} onChange={(e) => setEmail(e.target.value)} />
         <TextField required sx={{my: 2}} fullWidth variant="outlined" label="Phone" defaultValue={getResult?.data?.user.phone} onChange={(e) => setPhone(e.target.value)}/>
         <TextField required sx={{my: 2}} fullWidth variant="outlined" label="City" defaultValue={getResult?.data?.user.city} onChange={(e) => setCity(e.target.value)} />

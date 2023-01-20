@@ -31,8 +31,13 @@ export function useLogoutUser() {
   return useApiPostRequest(request)
 }
 
-export function useUpdateUser() {
-  const request = RequestHandler.User.Update;
+export function useUpdateUserInfo() {
+  const request = RequestHandler.User.UpdateInfo;
+  return useApiPostRequest(request)
+}
+
+export function useUpdateUserPassword() {
+  const request = RequestHandler.User.UpdatePassword;
   return useApiPostRequest(request)
 }
 

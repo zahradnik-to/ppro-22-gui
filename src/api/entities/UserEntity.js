@@ -29,9 +29,16 @@ const Logout = {
   withCredentials: true
 }
 
-const Update = {
-  url: `${URL}/update`,
+const UpdateInfo = {
+  url: `${URL}/update/info`,
   method: "put",
+  withCredentials: true
+}
+
+const UpdatePassword = {
+  url: `${URL}/update/password`,
+  method: "put",
+  withCredentials: true
 }
 
 const Delete = {
@@ -45,6 +52,7 @@ export default {
   Register,
   Login,
   Logout,
-  Update,
+  UpdateInfo,
+  UpdatePassword,
   Delete,
 };
