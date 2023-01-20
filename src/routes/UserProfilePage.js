@@ -1,5 +1,5 @@
 import useAuth from "../api/hooks/useAuth";
-import {useGetUser, useUpdateUser} from "../api/useUser";
+import {useGetUser, useUpdateUserInfo} from "../api/useUser";
 import {Box, Button, LinearProgress, TextField, Typography} from "@mui/material";
 import {MuiFileInput} from "mui-file-input";
 import {useEffect, useState} from "react";
@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 function UserProfilePage() {
   const {auth} = useAuth();
   const [getResult, getLoaded, error] = useGetUser({ username: auth?.user?.username } );
-  const [updateResult, updateLoaded, updateError, executeUpdate] = useUpdateUser();
+  const [updateResult, updateLoaded, updateError, executeUpdate] = useUpdateUserInfo();
   const [user, setUser] = useState({});
 
 

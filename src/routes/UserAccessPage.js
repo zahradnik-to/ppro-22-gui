@@ -3,12 +3,12 @@ import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 import {useLocation, useNavigate} from "react-router-dom";
 import useAuth from "../api/hooks/useAuth";
-import {useLoginUser, useUpdateUserInfo} from "../api/useUser";
+import {useLoginUser, useRegisterUser} from "../api/useUser";
 import {useEffect, useState} from "react";
 
 export default function UserAccessPage() {
   const [loginResult, loginLoaded, loginError, executeLogin] = useLoginUser();
-  const [registerResult, registerLoaded, registerError, executeRegister] = useUpdateUserInfo();
+  const [registerResult, registerLoaded, registerError, executeRegister] = useRegisterUser();
   const [logErrMsg, setLogErrMsg] = useState("")
   const [regErrMsg, setRegErrMsg] = useState("")
 
