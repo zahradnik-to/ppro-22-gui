@@ -208,7 +208,7 @@ function ResponsiveAppBar() {
                    <MenuItem
                      onClick={handleCloseUserMenu}
                      component={NavLink}
-                     to={'/my-events'}
+                     to={`/catalog/${auth?.user?.username}`}
                    >
                      <Typography textAlign="center">My events</Typography>
                    </MenuItem>

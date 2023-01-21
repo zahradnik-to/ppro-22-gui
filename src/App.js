@@ -14,6 +14,7 @@ import RequireAuth from "./components/RequireAuth";
 import ErrorPage from "./routes/ErrorPage";
 import UserProfilePage from "./routes/UserProfilePage";
 import UserMyOrdersPage from "./routes/UserMyOrdersPage";
+import SellerCatalogPage from "./routes/SellerCatalogPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="contact" element={<ContactPage />} />
           <Route path="userAccess" element={<UserAccessPage />} />
 
+          <Route path="catalog/:username" element={<SellerCatalogPage />} />
           <Route path="event/:id" element={<EventDetailPage />} />
 
           <Route element={<RequireAuth allowedRoles={"USER"}/>}>
@@ -40,7 +42,7 @@ function App() {
           </Route>
 
           <Route path="unauthorized" element={<ErrorPage errStatus={401} errMessage={"You are not authorized to view this page."} />} />
-          <Route path="*" element={<BlankPage />} />
+          <Route path="*" element={<ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />} />
         </Route>
       </Routes>
     </AuthProvider>

@@ -22,12 +22,13 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import { StyledTableRow, StyledTableCell } from '../components/StyledTable';
+import {getMockEvent} from "../mock/mock-helper";
 
 
 export default function EventDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  let [event, loaded, error] = useGetEvent({id: id});
+  let [event, loaded, error] = useGetEvent({id: id}, getMockEvent());
 
   const handleBuyVariant = (id) => {
     console.log(`Trying to buy id: ${id}`)
@@ -131,16 +132,14 @@ export default function EventDetailPage() {
           <Typography gutterBottom variant='h4' component='h2'>Available variants
             {/* TODO Check if owner or admin */}
             {(true) &&
-              <>
-                <Button
-                  variant="outlined"
-                  startIcon={<BuildIcon />}
-                  onClick={() => handleEditVariants()}
-                  sx={{marginLeft: "1em"}}
-                >
-                  Manage variants
-                </Button>
-              </>
+              <Button
+                variant="outlined"
+                startIcon={<BuildIcon />}
+                onClick={() => handleEditVariants()}
+                sx={{marginLeft: "1em"}}
+              >
+                Manage variants
+              </Button>
             }
           </Typography>
         </Box>

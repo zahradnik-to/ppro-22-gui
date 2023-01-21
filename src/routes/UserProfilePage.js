@@ -8,15 +8,14 @@ function UserProfilePage() {
   const {auth} = useAuth();
   const [getResult, getLoaded, error] = useGetUser({ username: auth?.user?.username } );
   const [updateResult, updateLoaded, updateError, executeUpdate] = useUpdateUserInfo();
-  const [user, setUser] = useState({});
 
+
+  const [errorMessage, setErrorMessage] = useState("Error occurred");
 
   const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
   const [name, setName] = useState(null);
   const [surname, setSurname] = useState(null);
   const [description, setDescription] = useState(null);
-  const [companyName, setCompanyName] = useState(null);
   const [city, setCity] = useState(null);
   const [street, setStreet] = useState(null);
   const [zipCode, setZipCode] = useState(null);
@@ -24,10 +23,9 @@ function UserProfilePage() {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    if (updateResult?.status === 200) {
-      console.log("UPDATE OK", updateResult)
+    if (updateResult?.status !== 200) {
+      setErrorMessage("Something went wrong!") // Todo fill error message
     }
-    console.log("UPDATE NOT-OK", updateResult)
   }, [updateResult])
 
   if (!getLoaded) {
@@ -36,21 +34,19 @@ function UserProfilePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const updatedUser = {
-      ...getResult?.data?.user,
-      email,
-      password,
-      name,
-      surname,
-      description,
-      companyName,
-      city,
-      street,
-      zipCode,
-      phone,
-      image,
+    const userUpdate = {
+      id: getResult?.data?.user?.id,
+      email: email || getResult?.data?.user?.email,
+      name: name || getResult?.data?.user?.name,
+      surname: surname || getResult?.data?.user?.surname,
+      description: description || getResult?.data?.user?.description,
+      city: city || getResult?.data?.user?.city,
+      street: street || getResult?.data?.user?.street,
+      zipCode: zipCode || getResult?.data?.user?.zipCode,
+      phone: phone || getResult?.data?.user?.phone,
+      image: image || getResult?.data?.user?.image,
     }
-    executeUpdate(updatedUser);
+    executeUpdate(userUpdate);
   }
 
   const handleImageChange = (newImage) => {
@@ -78,6 +74,7 @@ function UserProfilePage() {
           <Button variant="contained" type={"submit"}>Save changes</Button>
         </Box>
       </form>
+      <Typography color={"red"}>{errorMessage}</Typography>
     </Box>
   );
 }

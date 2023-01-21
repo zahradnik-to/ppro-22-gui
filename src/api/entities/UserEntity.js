@@ -32,7 +32,10 @@ const Logout = {
 const UpdateInfo = {
   url: `${URL}/update/info`,
   method: "put",
-  withCredentials: true
+  withCredentials: true,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
 }
 
 const UpdatePassword = {

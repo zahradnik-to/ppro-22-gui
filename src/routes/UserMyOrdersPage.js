@@ -14,6 +14,8 @@ function UserMyOrdersPage() {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
+              <StyledTableCell>Event name</StyledTableCell>
+              <StyledTableCell>Variant</StyledTableCell>
               <StyledTableCell>Start</StyledTableCell>
               <StyledTableCell>End</StyledTableCell>
               <StyledTableCell>Price</StyledTableCell>
@@ -22,6 +24,8 @@ function UserMyOrdersPage() {
           <TableBody>
             {orders.map((order) => (
               <StyledTableRow key={order.id}>
+                <StyledTableCell component="th" scope="row">{`Event name`}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">{`Variant name`}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">{`${format(new Date(order.startDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">{`${format(new Date(order.endDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">{`${order.price}€`}</StyledTableCell>
