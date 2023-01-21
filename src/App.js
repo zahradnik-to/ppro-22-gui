@@ -15,6 +15,7 @@ import ErrorPage from "./routes/ErrorPage";
 import UserProfilePage from "./routes/UserProfilePage";
 import UserMyOrdersPage from "./routes/UserMyOrdersPage";
 import SellerCatalogPage from "./routes/SellerCatalogPage";
+import EventCreatePage from "./routes/EventCreatePage";
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
           </Route>
 
           <Route element={<RequireAuth allowedRoles={["SELLER","ADMIN"]}/>}>
-            <Route path="event/create" element={<>TODO</>} />
+            <Route path="event/create" element={<EventCreatePage />} />
             <Route path="event/:id/edit" element={<EventUpdatePage />} />
             <Route path="event/:id/editVariants" element={<EventVariantsUpdatePage />} />
           </Route>
