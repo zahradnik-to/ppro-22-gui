@@ -39,6 +39,8 @@ export default function SellerCatalogPage() {
     return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
 
+  console.log(getUserResult)
+
   return (
     <>
       <Box my={2}>
@@ -46,7 +48,7 @@ export default function SellerCatalogPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={3}>
             <img
-              src={getUserResult?.data?.user.image || "https://picsum.photos/400/250"}
+              src={`data:image/*;base64,${getUserResult?.data?.user.image?.data}`}
               height={"100%"}
               width={"100%"}
             />

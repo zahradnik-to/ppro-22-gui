@@ -13,16 +13,25 @@ const List = {
 const Create = {
   url: `${URL}/create`,
   method: "post",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
 }
 
 const Update = {
   url: `${URL}/update`,
   method: "put",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
 }
 
 const Delete = {
   url: `${URL}/delete`,
   method: "delete",
+  withCredentials: true
 }
 
 export default {
