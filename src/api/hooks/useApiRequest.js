@@ -31,7 +31,7 @@ export function useApiGetRequest(request, mockedResult){
  * @return {[result, loaded, error, executeCall]}
  */
 export function useApiPostRequest(request) {
-  const [result, setResult] = useState({});
+  const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 

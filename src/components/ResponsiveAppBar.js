@@ -175,7 +175,7 @@ function ResponsiveAppBar() {
               {auth?.user?.username}
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{p: 0, ml: 1}}>
-                  <Avatar alt="User avatar" src={auth?.user?.image}/>
+                  <Avatar alt="User avatar" src={`data:image/*;base64,${auth?.user?.image?.data}`}/>
                 </IconButton>
               </Tooltip>
               <Menu

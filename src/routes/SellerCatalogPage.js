@@ -1,7 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {
   Avatar,
-  Box, Button,
+  Box,
+  Button,
   Divider,
   Grid,
   LinearProgress,
@@ -12,8 +13,6 @@ import {
   Typography
 } from "@mui/material";
 import {useListEvents} from "../api/useEvent";
-import ArticleIcon from '@mui/icons-material/Article';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import PersonIcon from '@mui/icons-material/Person';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -22,7 +21,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import {useGetUser} from "../api/useUser";
 import EventCard from "../components/EventCard";
 import ErrorPage from "./ErrorPage";
-import BuildIcon from "@mui/icons-material/Build";
 import useAuth from "../api/hooks/useAuth";
 
 
@@ -96,7 +94,7 @@ export default function SellerCatalogPage() {
         <Box>
           <Typography gutterBottom variant='h4' component='h2'>Offered events
             {/* TODO Check if owner or admin */}
-            {(auth.user.username === username) &&
+            {(auth?.user?.username === username) &&
               <Button
                 variant="outlined"
                 startIcon={<AddCircleIcon />}

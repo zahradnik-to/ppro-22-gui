@@ -4,17 +4,17 @@ import {useState} from "react";
 
 LoginForm.propTypes = {
   handleLogin: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string,
+  message: PropTypes.object,
 };
 
-export default function LoginForm({handleLogin, errorMessage}) {
-  const [email, setEmail] = useState("");
+export default function LoginForm({handleLogin, message}) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const logUser = {
-      username: email, // TODO login with username or email?
+      username,
       password,
     }
     handleLogin(logUser)
@@ -32,9 +32,9 @@ export default function LoginForm({handleLogin, errorMessage}) {
         <Stack spacing={1}>
           <TextField
             variant="outlined"
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            label="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <TextField
@@ -49,7 +49,7 @@ export default function LoginForm({handleLogin, errorMessage}) {
             required
           />
           <Button variant="contained" type="submit">Log In</Button>
-          <Typography color={"red"}>{errorMessage}</Typography>
+          <Typography color={message.color}>{message.text}</Typography>
         </Stack>
       </form>
     </Box>

@@ -14,7 +14,7 @@ export default function LogoutButton({handleCloseUserMenu}) {
   const {setAuth} = useAuth();
 
   useEffect(() => {
-    if (logoutResult.status === 200) {
+    if (logoutResult?.status === 200) {
       setAuth(null);
       handleCloseUserMenu()
     }

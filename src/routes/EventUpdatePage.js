@@ -3,6 +3,7 @@ import {useGetEvent, useUpdateEvent} from "../api/useEvent";
 import {Box, Button, LinearProgress, TextField, Typography} from "@mui/material";
 import {MuiFileInput} from "mui-file-input";
 import {useState} from "react";
+import {getMockEvent} from "../mock/mock-helper";
 
 export default function EventUpdatePage() {
   const { id } = useParams();
@@ -12,7 +13,7 @@ export default function EventUpdatePage() {
   const [address, setAddress] = useState(null);
   const [image, setImage] = useState(null);
 
-  const [event, eventLoaded, error] = useGetEvent({id});
+  const [event, eventLoaded, error] = useGetEvent({id}, getMockEvent());
   const [updateResult, _, updateError, executeUpdate] = useUpdateEvent();
 
   const handleSubmit = (e) => {

@@ -9,40 +9,50 @@ import {useEffect, useState} from "react";
 export default function UserAccessPage() {
   const [loginResult, loginLoaded, loginError, executeLogin] = useLoginUser();
   const [registerResult, registerLoaded, registerError, executeRegister] = useRegisterUser();
-  const [logErrMsg, setLogErrMsg] = useState("")
-  const [regErrMsg, setRegErrMsg] = useState("")
+  const [logMsg, setLogMsg] = useState({})
+  const [regMsg, setRegMsg] = useState({})
 
   const {auth, setAuth} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  useEffect(() => {
-    if (loginResult.status === 200) {
-      setAuth({user: loginResult.data});
-      navigate(from, {replace: true})
-    }
-  }, [loginResult])
-
   if (auth?.user) {
     navigate(from, {replace: true})
   }
 
+  useEffect(() => {
+    if (registerResult?.status === 200 && registerResult?.data) {
+      setRegMsg({
+        color: 'green',
+        text: 'Registration successful. Please login.'
+      })
+    }
+  }, [registerResult])
+
+  useEffect(() => {
+    console.log(loginResult)
+    if (loginResult?.status === 200) {
+      setAuth({user: loginResult?.data});
+      navigate(from, {replace: true})
+    }
+  }, [loginResult])
+
   const handleLogin = (logUser) => {
     executeLogin(logUser)
       .catch((e) => {
-        const message = e?.response?.data?.message;
-        if (message) setLogErrMsg(message)
-        else setLogErrMsg("Unexpected error occurred.")
+        const text = e?.response?.data?.message;
+        if (text) setLogMsg({color: "red", text })
+        else setLogMsg({color: "red", text: "Unexpected error occurred."})
       })
   };
 
   const handleRegister = (newUser) => {
     executeRegister(newUser)
       .catch((e) => {
-        const message = e?.response?.data;
-        if (message) setRegErrMsg(message)
-        else setRegErrMsg("Unexpected error occurred.")
+        const text = e?.response?.data?.message;
+        if (text) setLogMsg({color: "red", text })
+        else setLogMsg({color: "red", text: "Unexpected error occurred."})
       })
   };
 
@@ -50,10 +60,10 @@ export default function UserAccessPage() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
-        <LoginForm handleLogin={handleLogin} errorMessage={logErrMsg}/>
+        <LoginForm handleLogin={handleLogin} message={logMsg}/>
       </Grid>
       <Grid item xs={12} md={6}>
-        <RegisterForm handleRegister={handleRegister} errorMessage={regErrMsg}/>
+        <RegisterForm handleRegister={handleRegister} message={regMsg}/>
       </Grid>
     </Grid>
   )
