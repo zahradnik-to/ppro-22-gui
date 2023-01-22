@@ -38,10 +38,12 @@ function UserProfilePage() {
     return <LinearProgress color="secondary"/>
   }
 
+  console.log(getResult)
+
   const handleUpdateInfo = (e) => {
     e.preventDefault()
     const userUpdate = {
-      id: getResult?.data?.user?.id,
+      id: auth.user.id,
       email: email || getResult?.data?.user?.email,
       name: name || getResult?.data?.user?.name,
       surname: surname || getResult?.data?.user?.surname,
@@ -50,9 +52,10 @@ function UserProfilePage() {
       street: street || getResult?.data?.user?.street,
       zipCode: zipCode || getResult?.data?.user?.zipCode,
       phone: phone || getResult?.data?.user?.phone,
-      image: image || getResult?.data?.user?.image,
+      image: image || null,
     }
-    executeInfoUpdate({userUpdate});
+    console.log(userUpdate)
+    executeInfoUpdate(userUpdate);
   }
 
   const handleImageChange = (newImage) => {
@@ -92,17 +95,16 @@ function UserProfilePage() {
                        onChange={(e) => setZipCode(e.target.value)}/>
             <TextField fullWidth label="Description" defaultValue={getResult?.data?.user.description}
                        multiline minRows={2} onChange={(e) => setDescription(e.target.value)}/>
-            <MuiFileInput fullWidth variant="outlined" label={"Image"} value={image}
-                          onChange={handleImageChange} placeholder={getResult?.data?.user.image}
-                          inputProps={{accept: "image/*"}}/>
+            <MuiFileInput variant="outlined" label={"New Image"} value={image}
+                          onChange={handleImageChange} inputProps={{accept: "image/*", sx: {width: '100%'}}}/>
             <Button variant="contained" type={"submit"}>Change info</Button>
-            <Typography color={"red"}>{infoErrorMessage}</Typography>
+            {/*<Typography color={"red"}>{infoErrorMessage}</Typography>*/}
           </Stack>
         </form>
       </Grid>
       <Grid item xs={12} md={6}>
         <form onSubmit={handleUpdatePassword}>
-          <Typography gutterBottom variant={"h3"} component="h1">User: {getResult?.data?.user.username}</Typography>
+          <Typography gutterBottom variant={"h3"} component="h1">Update password</Typography>
           <Stack spacing={1}>
             <TextField required fullWidth label="Password" defaultValue={""}
                        onChange={(e) => setOldPassword(e.target.value)}

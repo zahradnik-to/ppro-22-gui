@@ -1,7 +1,7 @@
 import {Grid} from "@mui/material";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
 import useAuth from "../api/hooks/useAuth";
 import {useLoginUser, useRegisterUser} from "../api/useUser";
 import {useEffect, useState} from "react";
@@ -16,10 +16,6 @@ export default function UserAccessPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-
-  if (auth?.user) {
-    navigate(from, {replace: true})
-  }
 
   useEffect(() => {
     if (registerResult?.status === 200 && registerResult?.data) {
@@ -56,6 +52,9 @@ export default function UserAccessPage() {
       })
   };
 
+  if (auth?.user) {
+    return <Navigate to={location.state?.from?.pathname} state={{from: location}} replace />
+  }
 
   return (
     <Grid container spacing={2}>
