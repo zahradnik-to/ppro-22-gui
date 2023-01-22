@@ -50,18 +50,20 @@ export function useApiPostRequest(request) {
 
 async function callApi(request, setResult, setError, setLoaded, mockedResult) {
   request.baseURL = BASE_URL;
+  let result = null;
+  let error = null;
   try {
-    const res = await axios(request);
-    if (mockedResult) setResult(mockedResult) // Todo delete mock
-    else setResult(res);
-    console.log("callApi: Axios result", res)
-    return Promise.resolve(res);
+    result = await axios(request);
+    console.log("callApi: Axios result", result)
   } catch (err) {
-    if (mockedResult) setResult(mockedResult) // Todo delete mock
-    setError(err.message);
+    error = err;
     console.log("callApi: Axios error", err)
-    return Promise.reject(err);
   } finally {
-    setLoaded(true);
+    if (mockedResult) result = mockedResult // Todo delete mock
+    setResult(result)
+    setError(error)
+    setLoaded(true)
   }
+  if (error) return Promise.reject(error);
+  return Promise.resolve(result);
 }

@@ -24,7 +24,7 @@ const Login = {
 }
 
 const Logout = {
-  url: `/logout`,
+  url: `/logoutUser`,
   method: "post",
   withCredentials: true
 }

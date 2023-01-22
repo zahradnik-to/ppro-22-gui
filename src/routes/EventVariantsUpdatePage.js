@@ -3,10 +3,11 @@ import {useParams} from "react-router-dom";
 import {useListVariants} from "../api/useVariant";
 import {useGetEvent} from "../api/useEvent";
 import VariantUpdateTable from "../components/VariantUpdateTable";
+import {getMockEvent} from "../mock/mock-helper";
 
 export default function EventVariantsUpdatePage() {
   const {id} = useParams();
-  const [event, eventLoaded, eventError] = useGetEvent({id});
+  const [event, eventLoaded, eventError] = useGetEvent({id}, getMockEvent());
   const [variants, variantsLoaded, variantsError, setVariants] = useListVariants({eventId: id});
 
   if (!(eventLoaded && variantsLoaded)) {

@@ -4,7 +4,6 @@ import HomePage from "./routes/HomePage";
 import AboutPage from "./routes/AboutPage";
 import CatalogPage from "./routes/CatalogPage";
 import ContactPage from "./routes/ContactPage";
-import BlankPage from "./routes/BlankPage";
 import EventDetailPage from "./routes/EventDetailPage";
 import EventUpdatePage from "./routes/EventUpdatePage";
 import EventVariantsUpdatePage from "./routes/EventVariantsUpdatePage";

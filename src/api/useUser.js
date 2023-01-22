@@ -27,7 +27,7 @@ export function useLoginUser() {
 }
 
 export function useLogoutUser() {
-  const request = RequestHandler.User.Login;
+  const request = RequestHandler.User.Logout;
   return useApiPostRequest(request)
 }
 
@@ -43,5 +43,10 @@ export function useUpdateUserPassword() {
 
 export function useDeleteUser() {
   const request = RequestHandler.User.Delete;
+  return useApiPostRequest(request)
+}
+
+export function useAuthenticateUser() {
+  const request = RequestHandler.User.Authenticate;
   return useApiPostRequest(request)
 }
