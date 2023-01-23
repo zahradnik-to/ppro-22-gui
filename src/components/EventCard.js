@@ -12,11 +12,9 @@ EventCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
 };
 
-// Todo Props should probably expect full Event object instead of parts
-export default function EventCard({id, name, description, image, price}) {
+export default function EventCard({id, name, description, image}) {
   const navigate = useNavigate();
 
   const handleCardOnClick = () => {
@@ -26,19 +24,12 @@ export default function EventCard({id, name, description, image, price}) {
   return(
     <Card>
       <CardActionArea onClick={() => handleCardOnClick()}>
-      <Badge
-        color="secondary"
-        badgeContent={`${price} €`}
-        showZero
-        overlap="circular"
-      >
         <CardMedia
           component="img"
           height="180"
           image={image}
-          alt="green iguana"
+          alt="Event image"
         />
-      </Badge>
       <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             { name }

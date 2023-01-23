@@ -39,8 +39,6 @@ export default function SellerCatalogPage() {
     return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
 
-  console.log(getUserResult)
-
   return (
     <>
       <Box my={2}>

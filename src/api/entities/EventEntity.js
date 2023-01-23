@@ -6,7 +6,7 @@ const Get = {
 }
 
 const List = {
-  url: `${URL}/list`,
+  url: `events`,
   method: "get",
 }
 

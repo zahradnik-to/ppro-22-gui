@@ -1,17 +1,25 @@
 import Grid from "@mui/material/Grid";
 import EventCard from "../components/EventCard";
+import {useListEvents} from "../api/useEvent";
+import {LinearProgress} from "@mui/material";
 
 function CatalogPage() {
+
+  const [getEventsResult, getEventsLoaded, getEventsError] = useListEvents({search: ""});
+
+  if (!getEventsLoaded) {
+    return <LinearProgress color="secondary"/>
+  }
+
   return (
     <Grid container spacing={{ xs: 2, md: 3 }}>
-      {Array.from(Array(8)).map((_, index) => (
-        <Grid item xs={2} sm={4} md={4} key={index}>
+      {getEventsResult?.data.map((event) => (
+        <Grid item xs={2} sm={4} md={4} key={event.id}>
           <EventCard
-            id={`${index}`}
-            name={`Event ${index}`}
-            description={"Integer a imperdiet sapien. Ut congue mauris vel nisi mattis, sed dignissim. Nunc magna nisl, rhoncus a tincidunt, interdum et libero."}
-            image={"https://picsum.photos/370/180"}
-            price={Math.floor(Math.random()*2500 + 150)}
+            id={event.id}
+            name={event.name}
+            description={event.shortDescription}
+            image={`data:image/*;base64,${event.image}`}
           />
         </Grid>
       ))}
