@@ -19,7 +19,7 @@ function CatalogPage() {
             id={event.id}
             name={event.name}
             description={event.shortDescription}
-            image={`data:image/*;base64,${event.image}`}
+            image={`data:image/*;base64,${event?.images?.data}`}
           />
         </Grid>
       ))}

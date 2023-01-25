@@ -1,23 +1,22 @@
 import {LinearProgress, Typography} from "@mui/material";
 import {useParams} from "react-router-dom";
-import {useListVariants} from "../api/useVariant";
-import {useGetEvent} from "../api/useEvent";
+import {useGetEvent, useGetEventAsSeller} from "../api/useEvent";
 import VariantUpdateTable from "../components/VariantUpdateTable";
-import {getMockEvent} from "../mock/mock-helper";
+import useAuth from "../api/hooks/useAuth";
 
 export default function EventVariantsUpdatePage() {
-  const {id} = useParams();
-  const [event, eventLoaded, eventError] = useGetEvent({id}, getMockEvent());
-  const [variants, variantsLoaded, variantsError, setVariants] = useListVariants({eventId: id});
+  const {eventId} = useParams();
+  const {auth} = useAuth();
+  const [event, eventLoaded, eventError] = useGetEventAsSeller({eventId, sellerId: auth.user.id});
 
-  if (!(eventLoaded && variantsLoaded)) {
+  if (!eventLoaded) {
     return <LinearProgress color="secondary"/>
   }
 
   return (
     <div>
       <Typography gutterBottom variant='h3' component='h1'>{event.name}</Typography>
-      <VariantUpdateTable variants={variants} setVariants={setVariants} eventId={id}/>
+      <VariantUpdateTable variants={event.data.variants} setVariants={() => {console.log("TODO")}} eventId={eventId}/>
     </div>
   );
 }

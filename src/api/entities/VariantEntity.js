@@ -6,8 +6,8 @@ const Get = {
 }
 
 const Order = {
-  url: `${URL}/list`,
-  method: "get",
+  url: `${URL}/order`,
+  method: "post",
   withCredentials: true,
 }
 

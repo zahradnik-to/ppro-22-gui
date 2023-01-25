@@ -1,4 +1,4 @@
-import {Box, Button, Table, TableBody, TableContainer, TableHead, TableRow} from "@mui/material";
+import {Button, Table, TableBody, TableContainer, TableHead, TableRow} from "@mui/material";
 import {StyledTableCell, StyledTableRow} from "./StyledTable";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
@@ -6,12 +6,12 @@ import enGb from "date-fns/locale/en-GB";
 import {DateTimePicker} from "@mui/x-date-pickers/DateTimePicker";
 import {isEqual, isPast, startOfMinute} from "date-fns";
 import TextField from "@mui/material/TextField";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
-import {useCreateVariant, useDeleteVariant, useUpdateManyVariants} from "../api/useVariant";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import {useEffect, useState} from "react";
+import {useAddVariant} from "../api/useVariant";
+import React, {useEffect, useState} from "react";
+import VariantUpdateTableRow from "./VariantUpdateTableRow";
+import useAuth from "../api/hooks/useAuth";
 
 VariantUpdateTable.propTypes = {
   variants: PropTypes.array.isRequired,
@@ -20,53 +20,26 @@ VariantUpdateTable.propTypes = {
 };
 
 export default function VariantUpdateTable({variants, eventId, setVariants}) {
-  const [updateResult, updateLoaded, updateError, executeUpdateMany] = useUpdateManyVariants();
-  const [createResult, createLoaded, createError, executeCreate] = useCreateVariant();
-  const [deleteResult, deleteLoaded, deleteError, executeDelete] = useDeleteVariant();
+  const {auth} = useAuth()
+  const [createResult, createLoaded, createError, executeCreate] = useAddVariant();
 
-  const [editedData, setEditedData] = useState([]);
-  const [newVarStart, setNewVarStart] = useState(null);
-  const [newVarEnd, setNewVarEnd] = useState(null);
-  const [newVarPrice, setNewVarPrice] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [price, setPrice] = useState("");
+  const [numberMax, setNumberMax] = useState("");
 
-  // Should react after handleDeleteVariant function completes call
-  useEffect(() =>{
-    if (!deleteLoaded) return
-    if (deleteResult.hasOwnProperty('error') || deleteError) return;
-    setVariants(removeObjectFromArray(variants, deleteResult.id));
-  }, [deleteResult])
-
-  useEffect(() =>{
+  useEffect(() => {
     if (!createLoaded) return
-    if (createResult.hasOwnProperty('error') || createError) return;
+    if (createResult?.hasOwnProperty('error') || createError) return;
     setVariants([...variants, createResult])
     resetNewVariantFields();
   }, [createResult])
 
-  useEffect(() =>{
-    if (createError || updateError || deleteError){
-      console.error("ERROR OCCURRED IN COMPONENT", {createError, updateError, deleteError})
+  useEffect(() => {
+    if (createError) {
+      console.error("ERROR OCCURRED IN COMPONENT", {createError})
     }
-  }, [createError, updateError, deleteError])
-
-  const handleDateChange = (id, objProperty, value) => {
-    handleEdit(id, objProperty, value)
-  };
-
-  const decideDateValue = (id, objProperty) => {
-    const existingEdit = editedData.find(obj => obj.id === id)
-    if (existingEdit && existingEdit[objProperty]) return existingEdit[objProperty];
-    else return (variants.find(obj => obj.id === id))[objProperty]
-  };
-
-  const handleSaveAll = () => {
-    executeUpdateMany(editedData);
-  }
-
-  const handleDeleteVariant = async (variantId) => {
-    const mockedResponse = {id: variantId}; // TODO Delete this
-    executeDelete({id: variantId}, mockedResponse);
-  }
+  }, [createError])
 
   const removeObjectFromArray = (arr, variantId) => {
     const arrCopy = Array.from(arr);
@@ -78,42 +51,23 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
   }
 
   const resetNewVariantFields = () => {
-    setNewVarStart(null);
-    setNewVarEnd(null);
-    setNewVarPrice("");
+    setStartDate("");
+    setEndDate("");
+    setPrice("");
   }
 
-  const handleAddVariant = () => {
+  const handleAddVariant = (e) => {
+    e.preventDefault()
     const newVariant = {
+      sellerId: auth.user.id,
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
       eventId,
-      startDate: new Date(newVarStart).toISOString(),
-      endDate: new Date(newVarStart).toISOString(),
-      price: newVarPrice,
+      price,
+      numberMax,
     }
-    const mockedResponse = newVariant;
-    executeCreate(newVariant, mockedResponse)
+    executeCreate(newVariant)
   }
-
-  /* Adds edited row to array of edited objects. */
-  const handleEdit = (id, objProperty, value) => {
-    const propertyIsDate = (objProperty === 'startDate' || objProperty === 'endDate')
-    if (propertyIsDate) value = new Date(value).toISOString()
-
-    const newEditedData = [...editedData];
-    const existingEdit = newEditedData.find(obj => obj.id === id)
-
-    if (existingEdit) {
-      existingEdit[objProperty] = value;
-    } else {
-      const originalObject = variants.find(obj => obj.id === id)
-      const editObject = {id: originalObject.id};
-
-      if (propertyIsDate) originalObject[objProperty] = value
-      editObject[objProperty] = value;
-      newEditedData.push(editObject)
-    }
-    setEditedData(newEditedData);
-  };
 
   // Disable past dates except the default one, to prevent error when displaying past dates
   const checkInvalidDates = (newDate, defaultDate) => {
@@ -122,8 +76,8 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
     else return isPast(newDate);
   }
 
-  return(
-    <>
+  return (
+    <form onSubmit={handleAddVariant}>
       <TableContainer>
         <Table sx={{minWidth: 700}} aria-label="customized table">
           <TableHead>
@@ -131,123 +85,81 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
               <StyledTableCell>Start</StyledTableCell>
               <StyledTableCell>End</StyledTableCell>
               <StyledTableCell>Price</StyledTableCell>
+              <StyledTableCell>Availability</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell/>
             </TableRow>
           </TableHead>
           <TableBody>
             {variants.map((variant) => (
-              <StyledTableRow key={variant.id}>
-                <StyledTableCell component="th" scope="row">
-                  <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
-                    <DateTimePicker
-                      ampm={false}
-                      minutesStep={15}
-                      inputProps={{readOnly: true}}
-                      value={decideDateValue(variant.id, 'startDate')}
-                      onChange={(newValue) => {
-                        handleDateChange(variant.id, 'startDate', newValue);
-                      }}
-                      shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
-                      renderInput={(props) => <TextField {...props} />}
-                    />
-                  </LocalizationProvider>
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
-                    <DateTimePicker
-                      ampm={false}
-                      minutesStep={15}
-                      value={decideDateValue(variant.id, 'endDate')}
-                      inputProps={{readOnly: true}}
-                      onChange={(newValue) => {
-                        handleDateChange(variant.id, 'endDate', newValue);
-                      }}
-                      shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
-                      renderInput={(props) => <TextField {...props} />}
-                    />
-                  </LocalizationProvider>
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    defaultValue={variant.price}
-                    type="number"
-                    inputProps={{min: 1}}
-                    onChange={(e) => handleEdit(variant.id, 'price', e.target.value)}/>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    color={"error"}
-                    variant="outlined"
-                    startIcon={<DeleteIcon/>}
-                    onClick={() => handleDeleteVariant(variant.id)}
-                  >
-                    Delete
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
+              <VariantUpdateTableRow key={variant.id} variant={variant}/>
             ))}
             <StyledTableRow>
               <StyledTableCell component="th" scope="row">
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
                   <DateTimePicker
+                    required
                     ampm={false}
                     minutesStep={15}
                     inputProps={{readOnly: true}}
-                    value={newVarStart}
-                    onChange={setNewVarStart}
+                    value={startDate}
+                    onChange={setStartDate}
                     shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
-                    renderInput={(props) => <TextField {...props} />}
+                    renderInput={(props) => <TextField required {...props} />}
                   />
                 </LocalizationProvider>
               </StyledTableCell>
               <StyledTableCell component="th" scope="row">
                 <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
                   <DateTimePicker
+                    required
                     ampm={false}
                     minutesStep={15}
-                    value={newVarEnd}
+                    value={endDate}
                     inputProps={{readOnly: true}}
-                    onChange={setNewVarEnd}
+                    onChange={setEndDate}
                     shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
-                    renderInput={(props) => <TextField {...props} />}
+                    renderInput={(props) => <TextField required {...props} />}
                   />
                 </LocalizationProvider>
               </StyledTableCell>
               <StyledTableCell component="th" scope="row">
                 <TextField
+                  required
                   fullWidth
                   variant="outlined"
                   placeholder={"Price"}
-                  value={newVarPrice}
+                  value={price}
                   type="number"
                   inputProps={{min: 1}}
-                  onChange={(e) => setNewVarPrice(e.target.value)}/>
+                  onChange={(e) => setPrice(e.target.value)}/>
+              </StyledTableCell>
+              <StyledTableCell component="th" scope="row">
+                <TextField
+                  required
+                  fullWidth
+                  variant="outlined"
+                  placeholder={"Max availability"}
+                  value={numberMax}
+                  type="number"
+                  inputProps={{min: 1}}
+                  onChange={(e) => setNumberMax(e.target.value)}/>
               </StyledTableCell>
               <StyledTableCell align="right">
                 <Button
                   color={"success"}
                   variant="outlined"
                   startIcon={<AddIcon/>}
-                  onClick={() => handleAddVariant()}
+                  type={"submit"}
                 >
-                  Add New
+                  Add
                 </Button>
               </StyledTableCell>
+              <StyledTableCell/>
             </StyledTableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{display: "flex", justifyContent: 'flex-end', marginTop: '1em'}}>
-        <Button
-          variant="contained"
-          startIcon={<ModeEditIcon/>}
-          onClick={() => handleSaveAll()}
-        >
-          Save all
-        </Button>
-      </Box>
-  </>
+    </form>
   )
 }

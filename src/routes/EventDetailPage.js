@@ -61,15 +61,13 @@ export default function EventDetailPage() {
     return <LinearProgress color="secondary"/>
   }
 
-  console.log(event)
-
   return (
     <>
       <Box my={2}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={7}>
             <img
-              src={event.data.image}
+              src={`data:image/*;base64,${event?.data?.images?.data}`}
               height={"100%"}
               width={"100%"}
             />

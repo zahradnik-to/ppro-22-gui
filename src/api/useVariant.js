@@ -22,18 +22,17 @@ export function useListVariants(data) {
   return useApiGetRequest(request, getMockEvent().offeredPackages)
 }
 
-export function useCreateVariant() {
-  const request = RequestHandler.Variant.Create;
+export function useAddVariant() {
+  const request = RequestHandler.Variant.Add;
   return useApiPostRequest(request)
 }
 
-// Accepts array of objects
-export function useUpdateManyVariants() {
-  const request = RequestHandler.Variant.Update;
+export function useOrderVariant() {
+  const request = RequestHandler.Variant.Add;
   return useApiPostRequest(request)
 }
 
-export function useDeleteVariant() {
-  const request = RequestHandler.Variant.Delete;
+export function useCancelVariant() {
+  const request = RequestHandler.Variant.Cancel;
   return useApiPostRequest(request);
 }

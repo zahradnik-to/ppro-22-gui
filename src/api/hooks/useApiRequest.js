@@ -54,10 +54,10 @@ async function callApi(request, setResult, setError, setLoaded, mockedResult) {
   let error = null;
   try {
     result = await axios(request);
-    console.log("callApi: Axios result", result)
+    console.log(`${request.url} RESULT: `, result)
   } catch (err) {
     error = err;
-    console.log("callApi: Axios error", err)
+    console.log(`${request.url} ERROR: `, err)
   } finally {
     if (mockedResult) result = mockedResult // Todo delete mock
     setResult(result)

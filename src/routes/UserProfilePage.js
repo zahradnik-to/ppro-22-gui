@@ -12,7 +12,7 @@ import {
   ListItemText,
   Typography
 } from "@mui/material";
-import {useListEvents} from "../api/useEvent";
+import {useGetEventsOfSeller, useListEvents} from "../api/useEvent";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
@@ -28,35 +28,33 @@ import useAuth from "../api/hooks/useAuth";
 export default function UserProfilePage() {
   const { auth } = useAuth();
   const { username } = useParams();
-  const [getUserResult, getUserLoaded, getUserError] = useGetUser({ username } );
-  const [getEventsResult, getEventsLoaded, getEventsError] = useListEvents({ username } );
+  const [getUserResult, getUserLoaded, getUserError] = useGetUser({ username });
+  const [getEventsResult, getEventsLoaded, getEventsError] = useGetEventsOfSeller({ username });
   const navigate = useNavigate();
 
   if (!getUserLoaded || !getEventsLoaded) {
     return <LinearProgress color="secondary"/>
   }
 
-  const foundUser = getUserResult?.data?.user;
-  if (foundUser){
+  const user = getUserResult?.data;
+  if (Object.keys(user).length === 0){
     return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
 
   const hasRole = auth?.user?.role?.some(role => ["SELLER", "ADMIN"].includes(role));
-  const hasRole2 = foundUser?.role?.some(role => ["SELLER"].includes(role));
-  const isOwner = auth?.user.id === foundUser.id;
+  const hasRole2 = user?.role?.some(role => ["SELLER"].includes(role));
+  const isOwner = auth?.user?.id === user?.id;
 
-  console.log({hasRole,
-    hasRole2,
-    isOwner,})
 
   return (
     <>
       <Box my={2}>
-        <Typography gutterBottom variant='h4' component='h1'>{getUserResult?.data?.user.username} profile</Typography>
+        <Typography gutterBottom variant='h4' component='h1'>{getUserResult?.data?.username} profile</Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={3}>
             <img
-              src={`data:image/*;base64,${getUserResult?.data?.user.image?.data}`}
+              alt={"avatar"}
+              src={`data:image/*;base64,${getUserResult?.data?.image?.data}`}
               height={"100%"}
               width={"100%"}
             />
@@ -69,7 +67,7 @@ export default function UserProfilePage() {
                     <PersonIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={`${getUserResult?.data?.user.name} ${getUserResult?.data?.user.surname}`}/>
+                <ListItemText primary={`${getUserResult?.data?.name} ${getUserResult?.data?.surname}`}/>
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -77,7 +75,7 @@ export default function UserProfilePage() {
                     <AlternateEmailIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={getUserResult?.data?.user.email} />
+                <ListItemText primary={getUserResult?.data?.email} />
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -85,7 +83,7 @@ export default function UserProfilePage() {
                     <PhoneIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={getUserResult?.data?.user.phone || "TODO PHONE"}/>
+                <ListItemText primary={getUserResult?.data?.phone || "TODO PHONE"}/>
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -93,7 +91,7 @@ export default function UserProfilePage() {
                     <InfoIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={getUserResult?.data?.user.description} />
+                <ListItemText primary={getUserResult?.data?.description} />
               </ListItem>
             </List>
             {(auth?.user?.username === username) &&
@@ -109,7 +107,7 @@ export default function UserProfilePage() {
           </Grid>
         </Grid>
       </Box>
-      { foundUser?.role?.some(role => role === "SELLER") &&
+      { user?.role?.some(role => role === "SELLER") &&
         <>
           <Divider/>
           <Box my={2}>
@@ -128,14 +126,13 @@ export default function UserProfilePage() {
               </Typography>
             </Box>
             <Grid container spacing={{ xs: 2, md: 3 }}>
-              {Array.from(Array(8)).map((_, index) => (
-                <Grid item xs={12} sm={4} md={4} key={index}>
+              {getEventsResult?.data.map((event) => (
+                <Grid item xs={2} sm={4} md={4} key={event.id}>
                   <EventCard
-                    id={`${index}`}
-                    name={`Event ${index}`}
-                    description={"Integer a imperdiet sapien. Ut congue mauris vel nisi mattis, sed dignissim. Nunc magna nisl, rhoncus a tincidunt, interdum et libero."}
-                    image={"https://picsum.photos/370/180"}
-                    price={Math.floor(Math.random()*2500 + 150)}
+                    id={event.id}
+                    name={event.name}
+                    description={event.shortDescription}
+                    image={`data:image/*;base64,${event?.images?.data}`}
                   />
                 </Grid>
               ))}

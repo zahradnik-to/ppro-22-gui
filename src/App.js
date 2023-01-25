@@ -38,7 +38,7 @@ function App() {
           <Route element={<RequireAuth allowedRoles={["SELLER","ADMIN"]}/>}>
             <Route path="event/create" element={<EventCreatePage />} />
             <Route path="event/:id/edit" element={<EventUpdatePage />} />
-            <Route path="event/:id/editVariants" element={<EventVariantsUpdatePage />} />
+            <Route path="event/:eventId/editVariants" element={<EventVariantsUpdatePage />} />
           </Route>
 
           <Route path="unauthorized" element={<ErrorPage errStatus={401} errMessage={"You are not authorized to view this page."} />} />
