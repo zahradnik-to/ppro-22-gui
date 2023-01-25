@@ -1,17 +1,29 @@
-const URL = 'event';
+const EVENT = 'event';
+const EVENTS = 'events';
 
 const Get = {
-  url: `${URL}/get`,
+  url: `${EVENT}/get`,
   method: "get",
 }
 
-const List = {
-  url: `events`,
+const GetAsSeller = {
+  url: `${EVENT}/get-as-seller/`,
+  method: "get",
+  withCredentials: true,
+}
+
+const GetEventsOfSeller = {
+  url: `${EVENTS}/seller`,
+  method: "get",
+}
+
+const ListEvents = {
+  url: `${EVENTS}`,
   method: "get",
 }
 
 const Create = {
-  url: `${URL}/create`,
+  url: `${EVENT}/create`,
   method: "post",
   withCredentials: true,
   headers: {
@@ -20,7 +32,7 @@ const Create = {
 }
 
 const Update = {
-  url: `${URL}/update`,
+  url: `${EVENTS}/update`,
   method: "put",
   withCredentials: true,
   headers: {
@@ -28,16 +40,18 @@ const Update = {
   },
 }
 
-const Delete = {
-  url: `${URL}/delete`,
+const Cancel = {
+  url: `${EVENT}/cancel`,
   method: "delete",
   withCredentials: true
 }
 
 export default {
   Get,
-  List,
+  GetAsSeller,
+  GetEventsOfSeller,
+  ListEvents,
   Create,
   Update,
-  Delete
+  Cancel
 };

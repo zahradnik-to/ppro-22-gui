@@ -1,127 +1,148 @@
+import {useNavigate, useParams} from "react-router-dom";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography
+} from "@mui/material";
+import {useListEvents} from "../api/useEvent";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EditIcon from '@mui/icons-material/Edit';
+import PersonIcon from '@mui/icons-material/Person';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import PhoneIcon from '@mui/icons-material/Phone';
+import InfoIcon from '@mui/icons-material/Info';
+import {useGetUser} from "../api/useUser";
+import EventCard from "../components/EventCard";
+import ErrorPage from "./ErrorPage";
 import useAuth from "../api/hooks/useAuth";
-import {useGetUser, useUpdateUserInfo, useUpdateUserPassword} from "../api/useUser";
-import {Box, Button, Grid, LinearProgress, Stack, TextField, Typography} from "@mui/material";
-import {MuiFileInput} from "mui-file-input";
-import {useEffect, useState} from "react";
-
-function UserProfilePage() {
-  const {auth} = useAuth();
-  const [getResult, getLoaded, error] = useGetUser({username: auth?.user?.username});
-  const [infoUpdateResult, __updateLoaded, __updateError, executeInfoUpdate] = useUpdateUserInfo();
-  const [pswUpdateResult, _updateLoaded, _updateError, executePwsUpdate] = useUpdateUserPassword();
 
 
-  const [infoErrorMessage, setInfoErrorMessage] = useState("Error occurred");
-  const [pswErrorMessage, setPswErrorMessage] = useState("Error occurred");
+export default function UserProfilePage() {
+  const { auth } = useAuth();
+  const { username } = useParams();
+  const [getUserResult, getUserLoaded, getUserError] = useGetUser({ username } );
+  const [getEventsResult, getEventsLoaded, getEventsError] = useListEvents({ username } );
+  const navigate = useNavigate();
 
-  const [email, setEmail] = useState(null);
-  const [name, setName] = useState(null);
-  const [surname, setSurname] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [city, setCity] = useState(null);
-  const [street, setStreet] = useState(null);
-  const [zipCode, setZipCode] = useState(null);
-  const [phone, setPhone] = useState(null);
-  const [image, setImage] = useState(null);
-
-  const [oldPassword, setOldPassword] = useState(null);
-  const [newPassword, setNewPassword] = useState(null);
-  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState(null);
-
-  useEffect(() => {
-    if (infoUpdateResult?.status !== 200) {
-      setInfoErrorMessage("Something went wrong!") // Todo fill error message
-    }
-  }, [infoUpdateResult])
-
-  if (!getLoaded) {
+  if (!getUserLoaded || !getEventsLoaded) {
     return <LinearProgress color="secondary"/>
   }
 
-  console.log(getResult)
-
-  const handleUpdateInfo = (e) => {
-    e.preventDefault()
-    const userUpdate = {
-      id: auth.user.id,
-      email: email || getResult?.data?.user?.email,
-      name: name || getResult?.data?.user?.name,
-      surname: surname || getResult?.data?.user?.surname,
-      description: description || getResult?.data?.user?.description,
-      city: city || getResult?.data?.user?.city,
-      street: street || getResult?.data?.user?.street,
-      zipCode: zipCode || getResult?.data?.user?.zipCode,
-      phone: phone || getResult?.data?.user?.phone,
-      image: image || null,
-    }
-    console.log(userUpdate)
-    executeInfoUpdate(userUpdate);
+  const foundUser = getUserResult?.data?.user;
+  if (foundUser){
+    return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
 
-  const handleImageChange = (newImage) => {
-    setImage(newImage);
-  }
+  const hasRole = auth?.user?.role?.some(role => ["SELLER", "ADMIN"].includes(role));
+  const hasRole2 = foundUser?.role?.some(role => ["SELLER"].includes(role));
+  const isOwner = auth?.user.id === foundUser.id;
 
-  const handleUpdatePassword = (e) => {
-    e.preventDefault()
-    const passwordUpdate = {
-      id: auth.user.id,
-      oldPassword,
-      newPassword,
-      newPasswordConfirmation,
-    }
-    executePwsUpdate({passwordUpdate})
-  }
+  console.log({hasRole,
+    hasRole2,
+    isOwner,})
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <form onSubmit={handleUpdateInfo}>
-          <Typography gutterBottom variant={"h3"} component="h1">User: {getResult?.data?.user.username}</Typography>
-          <Stack spacing={1}>
-            <TextField required fullWidth label="Name" defaultValue={getResult?.data?.user.name}
-                       onChange={(e) => setName(e.target.value)}/>
-            <TextField required fullWidth label="Surname" defaultValue={getResult?.data?.user.surname}
-                       onChange={(e) => setSurname(e.target.value)}/>
-            <TextField required fullWidth label="Email" defaultValue={getResult?.data?.user.email}
-                       onChange={(e) => setEmail(e.target.value)}/>
-            <TextField required fullWidth label="Phone" defaultValue={getResult?.data?.user.phone}
-                       onChange={(e) => setPhone(e.target.value)}/>
-            <TextField required fullWidth label="City" defaultValue={getResult?.data?.user.city}
-                       onChange={(e) => setCity(e.target.value)}/>
-            <TextField required fullWidth label="Street & No." defaultValue={getResult?.data?.user.street}
-                       onChange={(e) => setStreet(e.target.value)}/>
-            <TextField required fullWidth label="Zip code" defaultValue={getResult?.data?.user.zipCode}
-                       onChange={(e) => setZipCode(e.target.value)}/>
-            <TextField fullWidth label="Description" defaultValue={getResult?.data?.user.description}
-                       multiline minRows={2} onChange={(e) => setDescription(e.target.value)}/>
-            <MuiFileInput variant="outlined" label={"New Image"} value={image}
-                          onChange={handleImageChange} inputProps={{accept: "image/*", sx: {width: '100%'}}}/>
-            <Button variant="contained" type={"submit"}>Change info</Button>
-            {/*<Typography color={"red"}>{infoErrorMessage}</Typography>*/}
-          </Stack>
-        </form>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <form onSubmit={handleUpdatePassword}>
-          <Typography gutterBottom variant={"h3"} component="h1">Update password</Typography>
-          <Stack spacing={1}>
-            <TextField required fullWidth label="Password" defaultValue={""}
-                       onChange={(e) => setOldPassword(e.target.value)}
-                       inputProps={{type: 'password',}}/>
-            <TextField required fullWidth label="New password" defaultValue={""}
-                       onChange={(e) => setNewPassword(e.target.value)}
-                       inputProps={{autoComplete: 'new-password', type: 'password',}}/>
-            <TextField required fullWidth label="New password confirmation" defaultValue={""}
-                       onChange={(e) => setNewPasswordConfirmation(e.target.value)}
-                       inputProps={{autoComplete: 'new-password', type: 'password',}}/>
-            <Button variant="contained" type={"submit"}>Change password</Button>
-            <Typography color={"red"}>{pswErrorMessage}</Typography>
-          </Stack>
-        </form>
-      </Grid>
-    </Grid>
+    <>
+      <Box my={2}>
+        <Typography gutterBottom variant='h4' component='h1'>{getUserResult?.data?.user.username} profile</Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={3}>
+            <img
+              src={`data:image/*;base64,${getUserResult?.data?.user.image?.data}`}
+              height={"100%"}
+              width={"100%"}
+            />
+          </Grid>
+          <Grid item xs={12} sm={9}>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar sx={{bgcolor: 'secondary.main'}}>
+                    <PersonIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={`${getUserResult?.data?.user.name} ${getUserResult?.data?.user.surname}`}/>
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar sx={{bgcolor: 'secondary.main'}}>
+                    <AlternateEmailIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={getUserResult?.data?.user.email} />
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar sx={{bgcolor: 'secondary.main'}}>
+                    <PhoneIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={getUserResult?.data?.user.phone || "TODO PHONE"}/>
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar sx={{bgcolor: 'secondary.main'}}>
+                    <InfoIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={getUserResult?.data?.user.description} />
+              </ListItem>
+            </List>
+            {(auth?.user?.username === username) &&
+              <Button
+                variant="outlined"
+                startIcon={<EditIcon />}
+                onClick={() => navigate("/event/create")}
+                sx={{marginLeft: "1em", float: 'right'}}
+              >
+                Edit profile
+              </Button>
+            }
+          </Grid>
+        </Grid>
+      </Box>
+      { foundUser?.role?.some(role => role === "SELLER") &&
+        <>
+          <Divider/>
+          <Box my={2}>
+            <Box>
+              <Typography gutterBottom variant='h4' component='h2'>Offered events
+                {auth?.user?.role?.find(role => role === "SELLER") && (auth?.user?.username === username) &&
+                  <Button
+                    variant="outlined"
+                    startIcon={<AddCircleIcon />}
+                    onClick={() => navigate("/event/create")}
+                    sx={{marginLeft: "1em", float: 'right'}}
+                  >
+                    Add new Event
+                  </Button>
+                }
+              </Typography>
+            </Box>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
+              {Array.from(Array(8)).map((_, index) => (
+                <Grid item xs={12} sm={4} md={4} key={index}>
+                  <EventCard
+                    id={`${index}`}
+                    name={`Event ${index}`}
+                    description={"Integer a imperdiet sapien. Ut congue mauris vel nisi mattis, sed dignissim. Nunc magna nisl, rhoncus a tincidunt, interdum et libero."}
+                    image={"https://picsum.photos/370/180"}
+                    price={Math.floor(Math.random()*2500 + 150)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </>
+      }
+    </>
   );
 }
-
-export default UserProfilePage;

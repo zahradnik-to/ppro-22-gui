@@ -1,14 +1,16 @@
-const URL = 'user';
+const USER = 'user';
+const USERS = 'userS';
 
 const Get = {
-  url: `${URL}/get`,
+  url: `${USER}/get`,
   method: "get",
   withCredentials: true
 }
 
 const List = {
-  url: `${URL}/list`,
+  url: `${USERS}`,
   method: "post",
+  withCredentials: true,
 }
 
 const Register = {
@@ -30,7 +32,7 @@ const Logout = {
 }
 
 const UpdateInfo = {
-  url: `${URL}/update/info`,
+  url: `${USER}/update/info`,
   method: "put",
   withCredentials: true,
   headers: {
@@ -38,15 +40,28 @@ const UpdateInfo = {
   },
 }
 
+const UpdateRole = {
+  url: `${USER}/update/role`,
+  method: "put",
+  withCredentials: true,
+}
+
+const MyOrders = {
+  url: `${USER}/my-orders`,
+  method: "get",
+  withCredentials: true,
+}
+
 const UpdatePassword = {
-  url: `${URL}/update/password`,
+  url: `${USER}/update/password`,
   method: "put",
   withCredentials: true
 }
 
 const Delete = {
-  url: `${URL}/delete`,
+  url: `${USER}/delete`,
   method: "delete",
+  withCredentials: true,
 }
 
 export default {
@@ -57,5 +72,7 @@ export default {
   Logout,
   UpdateInfo,
   UpdatePassword,
+  UpdateRole,
+  MyOrders,
   Delete,
 };

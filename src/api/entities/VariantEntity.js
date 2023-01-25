@@ -5,30 +5,26 @@ const Get = {
   method: "get",
 }
 
-const List = {
+const Order = {
   url: `${URL}/list`,
   method: "get",
+  withCredentials: true,
 }
 
-const Create = {
-  url: `${URL}/create`,
+const Add = {
+  url: `${URL}/add`,
   method: "post",
+  withCredentials: true,
 }
 
-const Update = {
-  url: `${URL}/update`,
-  method: "put",
-}
-
-const Delete = {
-  url: `${URL}/delete`,
+const Cancel = {
+  url: `${URL}/cancel`,
   method: "delete",
 }
 
 export default {
   Get,
-  List,
-  Create,
-  Update,
-  Delete
+  Order,
+  Add,
+  Cancel
 };

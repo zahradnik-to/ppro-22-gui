@@ -32,10 +32,10 @@ const pages = [
     url: "/contact"
   },
 ]
-const accountMenu = [
+const accountMenu = (username) => [
   {
     name: "Profile",
-    url: "/user/profile"
+    url: `/user/${username}`
   },
   {
     name: "My orders",
@@ -194,7 +194,7 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {accountMenu.map((item) => (
+                {accountMenu(auth.user?.username).map((item) => (
                   <MenuItem
                     key={item.name}
                     onClick={handleCloseUserMenu}
@@ -208,7 +208,7 @@ function ResponsiveAppBar() {
                    <MenuItem
                      onClick={handleCloseUserMenu}
                      component={NavLink}
-                     to={`/catalog/${auth?.user?.username}`}
+                     to={`/profile/${auth?.user?.username}`}
                    >
                      <Typography textAlign="center">My events</Typography>
                    </MenuItem>

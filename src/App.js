@@ -11,9 +11,9 @@ import UserAccessPage from "./routes/UserAccessPage";
 import { AuthProvider } from "./context/AuthProvider";
 import RequireAuth from "./components/RequireAuth";
 import ErrorPage from "./routes/ErrorPage";
-import UserProfilePage from "./routes/UserProfilePage";
+import UserProfileEditPage from "./routes/UserProfileEditPage";
 import UserMyOrdersPage from "./routes/UserMyOrdersPage";
-import SellerCatalogPage from "./routes/SellerCatalogPage";
+import UserProfilePage from "./routes/UserProfilePage";
 import EventCreatePage from "./routes/EventCreatePage";
 
 function App() {
@@ -27,11 +27,11 @@ function App() {
           <Route path="contact" element={<ContactPage />} />
           <Route path="userAccess" element={<UserAccessPage />} />
 
-          <Route path="catalog/:username" element={<SellerCatalogPage />} />
           <Route path="event/:id" element={<EventDetailPage />} />
+          <Route path="user/:username" element={<UserProfilePage />} />
 
           <Route element={<RequireAuth allowedRoles={"USER"}/>}>
-            <Route path="user/profile" element={<UserProfilePage />} />
+            <Route path="user/profile/edit" element={<UserProfileEditPage />} />
             <Route path="user/my-orders" element={<UserMyOrdersPage />} />
           </Route>
 
