@@ -32,7 +32,7 @@ const Create = {
 }
 
 const Update = {
-  url: `${EVENTS}/update`,
+  url: `${EVENT}/update`,
   method: "put",
   withCredentials: true,
   headers: {

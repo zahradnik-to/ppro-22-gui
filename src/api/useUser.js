@@ -5,10 +5,10 @@ import {useApiGetRequest, useApiPostRequest} from "./hooks/useApiRequest";
  * @param params
  * @return {[User ,error]}
  */
-export function useGetUser(params, mockedResponse) {
+export function useGetUser(params) {
   const request = RequestHandler.User.Get;
   if (params) request.params = params;
-  return useApiGetRequest(request, mockedResponse)
+  return useApiGetRequest(request)
 }
 
 export function useListUsers() {

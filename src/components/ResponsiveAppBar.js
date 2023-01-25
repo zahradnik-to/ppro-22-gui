@@ -204,15 +204,6 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{item.name}</Typography>
                   </MenuItem>
                 ))}
-                { auth?.user?.role?.includes("SELLER") &&
-                   <MenuItem
-                     onClick={handleCloseUserMenu}
-                     component={NavLink}
-                     to={`/profile/${auth?.user?.username}`}
-                   >
-                     <Typography textAlign="center">My events</Typography>
-                   </MenuItem>
-                }
                 <LogoutButton handleCloseUserMenu={handleCloseUserMenu}/>
               </Menu>
             </Box>

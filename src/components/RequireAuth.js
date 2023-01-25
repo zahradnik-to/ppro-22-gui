@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {useLocation, Navigate, Outlet} from 'react-router-dom';
 import useAuth from "../api/hooks/useAuth";
 

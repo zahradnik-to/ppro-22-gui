@@ -16,9 +16,8 @@ export function useGetVariant(params) {
  * @param data
  * @return {[ [{Variant}] ,error]}
  */
-export function useListVariants(data) {
+export function useListVariants() {
   const request = RequestHandler.Variant.List;
-  if (data) request.data = data
   return useApiGetRequest(request, getMockEvent().offeredPackages)
 }
 
@@ -32,7 +31,8 @@ export function useOrderVariant() {
   return useApiPostRequest(request)
 }
 
-export function useCancelVariant() {
+export function useCancelVariant(params) {
   const request = RequestHandler.Variant.Cancel;
+  if (params) request.params = params
   return useApiPostRequest(request);
 }

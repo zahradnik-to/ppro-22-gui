@@ -4,10 +4,10 @@ import {useApiGetRequest, useApiPostRequest} from "./hooks/useApiRequest";
  * @param params
  * @return {[Event ,error]}
  */
-export function useGetEvent(params, mockedResponse) {
+export function useGetEvent(params) {
   const request = RequestHandler.Event.Get;
   if (params) request.params = params;
-  return useApiGetRequest(request, mockedResponse)
+  return useApiGetRequest(request)
 }
 
 export function useGetEventAsSeller(params) {

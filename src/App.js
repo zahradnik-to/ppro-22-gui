@@ -37,7 +37,7 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={["SELLER","ADMIN"]}/>}>
             <Route path="event/create" element={<EventCreatePage />} />
-            <Route path="event/:id/edit" element={<EventUpdatePage />} />
+            <Route path="event/:eventId/edit" element={<EventUpdatePage />} />
             <Route path="event/:eventId/editVariants" element={<EventVariantsUpdatePage />} />
           </Route>
 

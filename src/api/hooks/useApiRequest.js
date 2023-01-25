@@ -2,23 +2,21 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from '../apiConstants';
 
-// Todo in case of problems when sending cookie credentials https://github.com/axios/axios/issues/876
 // Docs for Request config can be found here: https://axios-http.com/docs/req_config
 
 /**
  * Hook for calling get requests on api. Fetches data on page load.
  * @param request Axios request config.
- * @param mockedResult If supplied, will return this result first
  * @return [result, loaded, error, setResult]
  */
-export function useApiGetRequest(request, mockedResult){
+export function useApiGetRequest(request){
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null); // Todo get rid of error? Check for errors only in response?
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     console.log("useApiGetRequest", request)
-    callApi(request, setResult, setError, setLoaded, mockedResult)
+    callApi(request, setResult, setError, setLoaded)
       .catch((e) => console.log("Error during get call",e))
   }, [request]);
 
@@ -35,20 +33,21 @@ export function useApiPostRequest(request) {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-  const executeCall = useCallback(async (data, mockedResult) => {
+  const executeCall = useCallback(async (data, params) => {
     if (data) {
       // Delete null values from data
       Object.keys(data).forEach((k) => data[k] == null && delete data[k]);
       request.data = data
     }
+    if (params) request.params = params;
     console.log("useApiPostRequest", request)
-    return callApi(request, setResult, setError, setLoaded, mockedResult)
+    return callApi(request, setResult, setError, setLoaded)
   }, [])
 
   return [result, loaded, error, executeCall];
 }
 
-async function callApi(request, setResult, setError, setLoaded, mockedResult) {
+async function callApi(request, setResult, setError, setLoaded) {
   request.baseURL = BASE_URL;
   let result = null;
   let error = null;
@@ -59,7 +58,6 @@ async function callApi(request, setResult, setError, setLoaded, mockedResult) {
     error = err;
     console.log(`${request.url} ERROR: `, err)
   } finally {
-    if (mockedResult) result = mockedResult // Todo delete mock
     setResult(result)
     setError(error)
     setLoaded(true)

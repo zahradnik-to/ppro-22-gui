@@ -18,7 +18,7 @@ function Layout() {
         result = await axios.post("/authenticate", {}, {withCredentials: true, baseURL: BASE_URL});
         user = result?.data || null
       } catch (e) {
-
+        console.log(e)
       }
       setAuth({ user })
     }

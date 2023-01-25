@@ -20,6 +20,7 @@ const Add = {
 const Cancel = {
   url: `${URL}/cancel`,
   method: "delete",
+  withCredentials: true,
 }
 
 export default {

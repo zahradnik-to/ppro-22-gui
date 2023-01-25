@@ -30,9 +30,8 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
 
   useEffect(() => {
     if (!createLoaded) return
-    if (createResult?.hasOwnProperty('error') || createError) return;
-    setVariants([...variants, createResult])
-    resetNewVariantFields();
+    // setVariants([...variants, createResult])
+    // resetNewVariantFields();
   }, [createResult])
 
   useEffect(() => {
