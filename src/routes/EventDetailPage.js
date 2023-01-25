@@ -1,34 +1,40 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {
   Avatar,
-  Box, Button,
+  Box,
+  Button,
   Divider,
-  Grid, LinearProgress,
+  Grid,
+  LinearProgress,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Table, TableBody, TableContainer, TableHead, TableRow,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography
 } from "@mui/material";
 import {useGetEvent} from "../api/useEvent";
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import ArticleIcon from '@mui/icons-material/Article';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PersonIcon from '@mui/icons-material/Person';
-import { format } from 'date-fns'
+import {format} from 'date-fns'
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
-import { StyledTableRow, StyledTableCell } from '../components/StyledTable';
-import {getMockEvent} from "../mock/mock-helper";
+import {StyledTableCell, StyledTableRow} from '../components/StyledTable';
+import useAuth from "../api/hooks/useAuth";
 
 
 export default function EventDetailPage() {
+  const {auth} = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
-  let [event, loaded, error] = useGetEvent({id: id}, getMockEvent());
+  const [event, eventLoaded, error] = useGetEvent({eventId: id});
 
   const handleBuyVariant = (id) => {
     console.log(`Trying to buy id: ${id}`)
@@ -49,12 +55,13 @@ export default function EventDetailPage() {
 
   const handleDeleteEvent = () => {
     console.log("Delete")
-    // Todo open confirmation modal
   }
 
-  if (!loaded) {
+  if (!eventLoaded) {
     return <LinearProgress color="secondary"/>
   }
+
+  console.log(event)
 
   return (
     <>
@@ -62,13 +69,13 @@ export default function EventDetailPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={7}>
             <img
-              src={event.image}
+              src={event.data.image}
               height={"100%"}
               width={"100%"}
             />
           </Grid>
           <Grid item xs={12} sm={5}>
-            <Typography gutterBottom variant='h3' component='h1'>{event.name}</Typography>
+            <Typography gutterBottom variant='h3' component='h1'>{event.data.name}</Typography>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
               <ListItem>
                 <ListItemAvatar>
@@ -76,7 +83,7 @@ export default function EventDetailPage() {
                     <PersonIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={event.contact.name} secondary={event.contact.phoneNumber}/>
+                <ListItemText primary={event?.contact?.name || "TODO OWNER USERNAME"}/>
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -84,7 +91,7 @@ export default function EventDetailPage() {
                     <EuroSymbolIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={`From 2599€`} />
+                <ListItemText primary={`From ${event.data.variants.reduce((a, b) => a.value < b.value ? a : b).price}€`} />
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -92,19 +99,10 @@ export default function EventDetailPage() {
                     <ArticleIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={event.descriptionShort}/>
-              </ListItem>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar sx={{bgcolor: 'secondary.main'}}>
-                    <LocationOnIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={event.address} />
+                <ListItemText primary={event.data.shortDescription}/>
               </ListItem>
             </List>
-            {/* TODO Check if owner or admin */}
-            { (true) &&
+            { auth?.user && (event.data.ownerId === auth?.user?.id) &&
               <Box textAlign="center">
                 <Button
                   variant="outlined"
@@ -130,8 +128,7 @@ export default function EventDetailPage() {
       <Box my={2}>
         <Box>
           <Typography gutterBottom variant='h4' component='h2'>Available variants
-            {/* TODO Check if owner or admin */}
-            {(true) &&
+            { auth?.user && (event.data.ownerId === auth?.user?.id) &&
               <Button
                 variant="outlined"
                 startIcon={<BuildIcon />}
@@ -151,20 +148,26 @@ export default function EventDetailPage() {
                 <StyledTableCell>Start</StyledTableCell>
                 <StyledTableCell>End</StyledTableCell>
                 <StyledTableCell>Price</StyledTableCell>
-                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell>Availability</StyledTableCell>
+                {auth?.user &&
+                  <StyledTableCell align="right"></StyledTableCell>
+                }
               </TableRow>
             </TableHead>
             <TableBody>
-              {event.offeredPackages.map((pcg) => (
-                <StyledTableRow key={pcg.id}>
-                  <StyledTableCell component="th" scope="row">{`${format(new Date(pcg.startDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{`${format(new Date(pcg.endDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{`${pcg.price}€`}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleBuyVariant(pcg.id)}>
-                      Buy
-                    </Button>
-                  </StyledTableCell>
+              {event.data.variants.map((variant) => (
+                <StyledTableRow key={variant.id}>
+                  <StyledTableCell component="th" scope="row">{`${format(new Date(variant.startDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{`${format(new Date(variant.endDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{`${variant.price}€`}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{`${variant.numberAvailable}/${variant.numberMax}`}</StyledTableCell>
+                  {auth?.user &&
+                    <StyledTableCell align="right">
+                      <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleBuyVariant(variant.id)}>
+                        Buy
+                      </Button>
+                    </StyledTableCell>
+                  }
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -174,7 +177,7 @@ export default function EventDetailPage() {
       <Divider/>
       <Box my={2}>
         <Typography gutterBottom variant='h4' component='h2'>Description</Typography>
-        <Typography sx={{whiteSpace: 'pre-line'}} variant='body1'>{event.descriptionLong}</Typography>
+        <Typography sx={{whiteSpace: 'pre-line'}} variant='body1'>{event.data.description}</Typography>
       </Box>
     </>
   );

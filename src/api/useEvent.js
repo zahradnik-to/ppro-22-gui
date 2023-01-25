@@ -15,7 +15,7 @@ export function useGetEvent(params, mockedResponse) {
  * @return {[ [{Event}] ,error]}
  */
 export function useListEvents(params) {
-  const request = RequestHandler.Event.List;
+  const request = RequestHandler.Event.ListEvents;
   if (params) request.params = params;
   return useApiGetRequest(request)
 }
@@ -30,7 +30,7 @@ export function useUpdateEvent() {
   return useApiPostRequest(request)
 }
 
-export function useDeleteEvent(data) {
-  const request = RequestHandler.Event.Delete;
+export function useCancelEvent(data) {
+  const request = RequestHandler.Event.Cancel;
   return useApiPostRequest(request)
 }
