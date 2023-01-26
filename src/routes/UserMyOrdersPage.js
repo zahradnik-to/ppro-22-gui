@@ -1,11 +1,19 @@
-import {Box, Table, TableBody, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import {Box, LinearProgress, Table, TableBody, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {StyledTableCell, StyledTableRow} from "../components/StyledTable";
 import {format} from "date-fns";
-import {getMockOrders} from "../mock/mock-helper";
+import useAuth from "../api/hooks/useAuth";
+import {useGetMyOrders} from "../api/useUser";
+import React from "react";
 
 function UserMyOrdersPage() {
+  const { auth } = useAuth()
+  const [getResult, getLoaded, error] = useGetMyOrders({username: auth?.user?.username});
 
-  const orders = getMockOrders();
+  if (!getLoaded) {
+    return <LinearProgress color="secondary"/>
+  }
+
+  const myOrders = getResult?.data?.orderedEvents;
 
   return (
     <Box>
@@ -15,17 +23,15 @@ function UserMyOrdersPage() {
           <TableHead>
             <TableRow>
               <StyledTableCell>Event name</StyledTableCell>
-              <StyledTableCell>Variant</StyledTableCell>
               <StyledTableCell>Start</StyledTableCell>
               <StyledTableCell>End</StyledTableCell>
               <StyledTableCell>Price</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => (
+            {myOrders.map((order) => (
               <StyledTableRow key={order.id}>
-                <StyledTableCell component="th" scope="row">{`Event name`}</StyledTableCell>
-                <StyledTableCell component="th" scope="row">{`Variant name`}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">{order.name}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">{`${format(new Date(order.startDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">{`${format(new Date(order.endDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
                 <StyledTableCell component="th" scope="row">{`${order.price}€`}</StyledTableCell>

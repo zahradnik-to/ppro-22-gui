@@ -139,7 +139,7 @@ export default function EventDetailPage() {
                   startIcon={<DeleteIcon />}
                   onClick={() => handleCancelEvent()}
                 >
-                  {isCancelled ? 'Event is cancelled.' : 'Cancel event.'}
+                  {isCancelled ? 'Event is cancelled' : 'Cancel event'}
                 </Button>
                 <Typography color="green">{message}</Typography>
               </Box>

@@ -11,6 +11,12 @@ export function useGetUser(params) {
   return useApiGetRequest(request)
 }
 
+export function useGetMyOrders(params) {
+  const request = RequestHandler.User.MyOrders;
+  if (params) request.params = params;
+  return useApiGetRequest(request)
+}
+
 export function useListUsers() {
   const request = RequestHandler.User.List
   return useApiPostRequest(request)
@@ -43,10 +49,5 @@ export function useUpdateUserPassword() {
 
 export function useDeleteUser() {
   const request = RequestHandler.User.Delete;
-  return useApiPostRequest(request)
-}
-
-export function useAuthenticateUser() {
-  const request = RequestHandler.User.Authenticate;
   return useApiPostRequest(request)
 }
