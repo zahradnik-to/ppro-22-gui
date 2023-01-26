@@ -27,7 +27,7 @@ export function useAddVariant() {
 }
 
 export function useOrderVariant() {
-  const request = RequestHandler.Variant.Add;
+  const request = RequestHandler.Variant.Order;
   return useApiPostRequest(request)
 }
 

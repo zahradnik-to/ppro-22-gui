@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Layout from "./Layout";
 import HomePage from "./routes/HomePage";
 import AboutPage from "./routes/AboutPage";
@@ -8,7 +8,7 @@ import EventDetailPage from "./routes/EventDetailPage";
 import EventUpdatePage from "./routes/EventUpdatePage";
 import EventVariantsUpdatePage from "./routes/EventVariantsUpdatePage";
 import UserAccessPage from "./routes/UserAccessPage";
-import { AuthProvider } from "./context/AuthProvider";
+import {AuthProvider} from "./context/AuthProvider";
 import RequireAuth from "./components/RequireAuth";
 import ErrorPage from "./routes/ErrorPage";
 import UserProfileEditPage from "./routes/UserProfileEditPage";
@@ -27,7 +27,7 @@ function App() {
           <Route path="contact" element={<ContactPage />} />
           <Route path="userAccess" element={<UserAccessPage />} />
 
-          <Route path="event/:id" element={<EventDetailPage />} />
+          <Route path="event/:eventId" element={<EventDetailPage />} />
           <Route path="user/:username" element={<UserProfilePage />} />
 
           <Route element={<RequireAuth allowedRoles={"USER"}/>}>

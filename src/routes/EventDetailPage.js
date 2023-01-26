@@ -17,7 +17,7 @@ import {
   TableRow,
   Typography
 } from "@mui/material";
-import {useGetEvent} from "../api/useEvent";
+import {useCancelEvent, useGetEvent} from "../api/useEvent";
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import ArticleIcon from '@mui/icons-material/Article';
 import PersonIcon from '@mui/icons-material/Person';
@@ -28,33 +28,39 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BuildIcon from '@mui/icons-material/Build';
 import {StyledTableCell, StyledTableRow} from '../components/StyledTable';
 import useAuth from "../api/hooks/useAuth";
+import {useOrderVariant} from "../api/useVariant";
+import React, {useEffect, useState} from "react";
 
 
 export default function EventDetailPage() {
   const {auth} = useAuth();
+  const {eventId} = useParams();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [event, eventLoaded, error] = useGetEvent({eventId: id});
 
-  const handleBuyVariant = (id) => {
-    console.log(`Trying to buy id: ${id}`)
-    const data = {
-      user: "userId",
-      id, // bought package id
+  const [event, eventLoaded, error] = useGetEvent({eventId});
+  const [cancelResult, cancelLoaded, cancelError, executeCancel] = useCancelEvent();
+  const [orderResult, orderLoaded, orderError, executeOrder] = useOrderVariant();
+
+  const [variants, setVariants] = useState([]);
+
+  useEffect(()=> {
+    setVariants(event?.data?.variants)
+  }, [eventLoaded])
+
+
+  useEffect(()=> {
+    if (orderResult?.status === 200) {
+      const ordered = orderResult?.data
+      setVariants(variants.map(v => v.id === ordered.id ? ordered : v))
     }
-    // Todo call buy variant hook with data
+  }, [orderResult])
+
+  const handleOrderVariant = (variantId) => {
+    executeOrder(null, {variantId, eventId})
   }
 
-  const handleEditEvent = () => {
-    navigate(`edit`)
-  }
-
-  const handleEditVariants = () => {
-    navigate(`editVariants`)
-  }
-
-  const handleDeleteEvent = () => {
-    console.log("Delete")
+  const handleCancelEvent = () => {
+    executeCancel(null, {eventId, userId: auth?.user?.id,})
   }
 
   if (!eventLoaded) {
@@ -105,7 +111,7 @@ export default function EventDetailPage() {
                 <Button
                   variant="outlined"
                   startIcon={<ModeEditIcon />}
-                  onClick={() => handleEditEvent()}
+                  onClick={() => navigate(`edit`)}
                   sx={{marginRight: "1em"}}
                 >
                   Edit
@@ -114,9 +120,9 @@ export default function EventDetailPage() {
                   color={"error"}
                   variant="outlined"
                   startIcon={<DeleteIcon />}
-                  onClick={() => handleDeleteEvent()}
+                  onClick={() => handleCancelEvent()}
                 >
-                  Delete
+                  Cancel event
                 </Button>
               </Box>
             }
@@ -130,7 +136,7 @@ export default function EventDetailPage() {
               <Button
                 variant="outlined"
                 startIcon={<BuildIcon />}
-                onClick={() => handleEditVariants()}
+                onClick={() => navigate(`editVariants`)}
                 sx={{marginLeft: "1em"}}
               >
                 Manage variants
@@ -153,7 +159,8 @@ export default function EventDetailPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {event.data.variants.map((variant) => (
+              {variants?.length &&
+                variants.sort((a,b) => Date.parse(new Date(a.startDate)) - Date.parse(new Date(b.startDate))).map((variant) => (
                 <StyledTableRow key={variant.id}>
                   <StyledTableCell component="th" scope="row">{`${format(new Date(variant.startDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{`${format(new Date(variant.endDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
@@ -161,8 +168,8 @@ export default function EventDetailPage() {
                   <StyledTableCell component="th" scope="row">{`${variant.numberAvailable}/${variant.numberMax}`}</StyledTableCell>
                   {auth?.user &&
                     <StyledTableCell align="right">
-                      <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleBuyVariant(variant.id)}>
-                        Buy
+                      <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleOrderVariant(variant.id)}>
+                        Order
                       </Button>
                     </StyledTableCell>
                   }

@@ -1,18 +1,18 @@
 import useAuth from "../api/hooks/useAuth";
 import {useGetUser, useUpdateUserInfo, useUpdateUserPassword} from "../api/useUser";
-import {Box, Button, Grid, LinearProgress, Stack, TextField, Typography} from "@mui/material";
+import {Button, Grid, LinearProgress, Stack, TextField, Typography} from "@mui/material";
 import {MuiFileInput} from "mui-file-input";
 import {useEffect, useState} from "react";
 
 function UserProfileEditPage() {
   const {auth} = useAuth();
   const [getResult, getLoaded, error] = useGetUser({username: auth?.user?.username});
-  const [infoUpdateResult, __updateLoaded, __updateError, executeInfoUpdate] = useUpdateUserInfo();
-  const [pswUpdateResult, _updateLoaded, _updateError, executePwsUpdate] = useUpdateUserPassword();
+  const [infoUpdateResult, __updateLoaded, infoUpdateError, executeInfoUpdate] = useUpdateUserInfo();
+  const [pswUpdateResult, _updateLoaded, pswUpdateError, executePwsUpdate] = useUpdateUserPassword();
 
 
-  const [infoErrorMessage, setInfoErrorMessage] = useState("Error occurred");
-  const [pswErrorMessage, setPswErrorMessage] = useState("Error occurred");
+  const [infoErrorMessage, setInfoErrorMessage] = useState({});
+  const [pswErrorMessage, setPswErrorMessage] = useState({});
 
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
@@ -29,16 +29,24 @@ function UserProfileEditPage() {
   const [newPasswordConfirmation, setNewPasswordConfirmation] = useState(null);
 
   useEffect(() => {
-    if (infoUpdateResult?.status !== 200) {
-      setInfoErrorMessage("Something went wrong!") // Todo fill error message
+    if (infoUpdateResult?.status === 200) {
+      setInfoErrorMessage({color: "green", text: "Information changed!"})
+    } else if (infoUpdateError) {
+      setInfoErrorMessage({color: "red", text: "Something went wrong!"})
     }
   }, [infoUpdateResult])
+
+  useEffect(() => {
+    if (pswUpdateResult?.status === 200) {
+      setPswErrorMessage({color: "green", text: "Password changed!"})
+    } else if (pswUpdateError) {
+      setPswErrorMessage({color: "red", text: "Something went wrong!"})
+    }
+  }, [pswUpdateResult])
 
   if (!getLoaded) {
     return <LinearProgress color="secondary"/>
   }
-
-  console.log(getResult)
 
   const handleUpdateInfo = (e) => {
     e.preventDefault()
@@ -54,7 +62,6 @@ function UserProfileEditPage() {
       phone: phone || getResult?.data?.user?.phone,
       image: image || null,
     }
-    console.log(userUpdate)
     executeInfoUpdate(userUpdate);
   }
 
@@ -70,35 +77,35 @@ function UserProfileEditPage() {
       newPassword,
       newPasswordConfirmation,
     }
-    executePwsUpdate({passwordUpdate})
+    executePwsUpdate(passwordUpdate)
   }
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
         <form onSubmit={handleUpdateInfo}>
-          <Typography gutterBottom variant={"h3"} component="h1">User: {getResult?.data?.user.username}</Typography>
+          <Typography gutterBottom variant={"h3"} component="h1">User: {getResult?.data?.username}</Typography>
           <Stack spacing={1}>
-            <TextField required fullWidth label="Name" defaultValue={getResult?.data?.user.name}
+            <TextField required fullWidth label="Name" defaultValue={getResult?.data?.name}
                        onChange={(e) => setName(e.target.value)}/>
-            <TextField required fullWidth label="Surname" defaultValue={getResult?.data?.user.surname}
+            <TextField required fullWidth label="Surname" defaultValue={getResult?.data?.surname}
                        onChange={(e) => setSurname(e.target.value)}/>
-            <TextField required fullWidth label="Email" defaultValue={getResult?.data?.user.email}
+            <TextField required fullWidth label="Email" defaultValue={getResult?.data?.email}
                        onChange={(e) => setEmail(e.target.value)}/>
-            <TextField required fullWidth label="Phone" defaultValue={getResult?.data?.user.phone}
+            <TextField required fullWidth label="Phone" defaultValue={getResult?.data?.phone}
                        onChange={(e) => setPhone(e.target.value)}/>
-            <TextField required fullWidth label="City" defaultValue={getResult?.data?.user.city}
+            <TextField required fullWidth label="City" defaultValue={getResult?.data?.city}
                        onChange={(e) => setCity(e.target.value)}/>
-            <TextField required fullWidth label="Street & No." defaultValue={getResult?.data?.user.street}
+            <TextField required fullWidth label="Street & No." defaultValue={getResult?.data?.street}
                        onChange={(e) => setStreet(e.target.value)}/>
-            <TextField required fullWidth label="Zip code" defaultValue={getResult?.data?.user.zipCode}
+            <TextField required fullWidth label="Zip code" defaultValue={getResult?.data?.zipCode}
                        onChange={(e) => setZipCode(e.target.value)}/>
-            <TextField fullWidth label="Description" defaultValue={getResult?.data?.user.description}
+            <TextField fullWidth label="Description" defaultValue={getResult?.data?.description}
                        multiline minRows={2} onChange={(e) => setDescription(e.target.value)}/>
             <MuiFileInput variant="outlined" label={"New Image"} value={image}
                           onChange={handleImageChange} inputProps={{accept: "image/*", sx: {width: '100%'}}}/>
             <Button variant="contained" type={"submit"}>Change info</Button>
-            {/*<Typography color={"red"}>{infoErrorMessage}</Typography>*/}
+            <Typography color={infoErrorMessage.color}>{infoErrorMessage.text}</Typography>
           </Stack>
         </form>
       </Grid>
@@ -116,7 +123,7 @@ function UserProfileEditPage() {
                        onChange={(e) => setNewPasswordConfirmation(e.target.value)}
                        inputProps={{autoComplete: 'new-password', type: 'password',}}/>
             <Button variant="contained" type={"submit"}>Change password</Button>
-            <Typography color={"red"}>{pswErrorMessage}</Typography>
+            <Typography color={pswErrorMessage.color}>{pswErrorMessage.text}</Typography>
           </Stack>
         </form>
       </Grid>

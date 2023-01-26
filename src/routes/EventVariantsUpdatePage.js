@@ -1,6 +1,6 @@
 import {LinearProgress, Typography} from "@mui/material";
-import {useParams} from "react-router-dom";
-import {useGetEvent, useGetEventAsSeller} from "../api/useEvent";
+import {Link, useParams} from "react-router-dom";
+import {useGetEventAsSeller} from "../api/useEvent";
 import VariantUpdateTable from "../components/VariantUpdateTable";
 import useAuth from "../api/hooks/useAuth";
 
@@ -15,8 +15,9 @@ export default function EventVariantsUpdatePage() {
 
   return (
     <div>
-      <Typography gutterBottom variant='h3' component='h1'>{event.name}</Typography>
-      <VariantUpdateTable variants={event.data.variants} setVariants={() => {console.log("TODO")}} eventId={eventId}/>
+      <Typography gutterBottom variant='h3' component='h1'>{event?.data?.name} variants</Typography>
+      <Typography variant={'h6'} sx={{textDecoration: 'none', color: 'primary.main'}} component={Link} to={`/event/${event?.data?.id}`} gutterBottom>🔙Back to event</Typography>
+      <VariantUpdateTable variantsList={event?.data?.variants} eventId={eventId}/>
     </div>
   );
 }

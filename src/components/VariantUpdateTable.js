@@ -8,37 +8,46 @@ import {isEqual, isPast, startOfMinute} from "date-fns";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import PropTypes from "prop-types";
-import {useAddVariant} from "../api/useVariant";
+import {useAddVariant, useCancelVariant} from "../api/useVariant";
 import React, {useEffect, useState} from "react";
 import VariantUpdateTableRow from "./VariantUpdateTableRow";
 import useAuth from "../api/hooks/useAuth";
 
 VariantUpdateTable.propTypes = {
-  variants: PropTypes.array.isRequired,
+  variantsList: PropTypes.array.isRequired,
   eventId: PropTypes.string.isRequired,
-  setVariants: PropTypes.func.isRequired,
 };
 
-export default function VariantUpdateTable({variants, eventId, setVariants}) {
+export default function VariantUpdateTable({variantsList, eventId}) {
   const {auth} = useAuth()
   const [createResult, createLoaded, createError, executeCreate] = useAddVariant();
+  const [deleteResult, deleteLoaded, deleteError, executeDelete] = useCancelVariant();
 
+
+  const [variants, setVariants] = useState([])
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [price, setPrice] = useState("");
   const [numberMax, setNumberMax] = useState("");
 
   useEffect(() => {
-    if (!createLoaded) return
-    // setVariants([...variants, createResult])
-    // resetNewVariantFields();
+    setVariants(variantsList);
+  }, [])
+
+  useEffect(() => {
+    if (createResult?.status === 200) {
+      setVariants(createResult?.data?.variants)
+      resetNewVariantFields();
+    }
   }, [createResult])
 
   useEffect(() => {
-    if (createError) {
-      console.error("ERROR OCCURRED IN COMPONENT", {createError})
+    console.log("deleteResult",deleteResult)
+    if (deleteResult?.status === 200) {
+      console.log(deleteResult)
+      setVariants(removeObjectFromArray(variants, deleteResult?.data?.cancelledId))
     }
-  }, [createError])
+  }, [deleteResult])
 
   const removeObjectFromArray = (arr, variantId) => {
     const arrCopy = Array.from(arr);
@@ -50,9 +59,10 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
   }
 
   const resetNewVariantFields = () => {
-    setStartDate("");
-    setEndDate("");
+    setStartDate(null);
+    setEndDate(null);
     setPrice("");
+    setNumberMax("");
   }
 
   const handleAddVariant = (e) => {
@@ -66,6 +76,10 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
       numberMax,
     }
     executeCreate(newVariant)
+  }
+
+  const handleCancelVariant = (variantId) => {
+    executeDelete(null, {variantId, userId: auth.user.id});
   }
 
   // Disable past dates except the default one, to prevent error when displaying past dates
@@ -90,8 +104,8 @@ export default function VariantUpdateTable({variants, eventId, setVariants}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {variants.map((variant) => (
-              <VariantUpdateTableRow key={variant.id} variant={variant}/>
+            { variants?.lenght !== 0 && variants.map((variant) => (
+              <VariantUpdateTableRow key={variant.id} variant={variant} cancel={handleCancelVariant}/>
             ))}
             <StyledTableRow>
               <StyledTableCell component="th" scope="row">

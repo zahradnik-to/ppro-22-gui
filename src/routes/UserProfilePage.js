@@ -12,7 +12,7 @@ import {
   ListItemText,
   Typography
 } from "@mui/material";
-import {useGetEventsOfSeller, useListEvents} from "../api/useEvent";
+import {useGetEventsOfSeller} from "../api/useEvent";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
@@ -98,7 +98,7 @@ export default function UserProfilePage() {
               <Button
                 variant="outlined"
                 startIcon={<EditIcon />}
-                onClick={() => navigate("/event/create")}
+                onClick={() => navigate("/user/profile/edit")}
                 sx={{marginLeft: "1em", float: 'right'}}
               >
                 Edit profile
