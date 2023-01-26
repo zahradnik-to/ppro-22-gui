@@ -133,6 +133,7 @@ export default function UserProfilePage() {
                     name={event.name}
                     description={event.shortDescription}
                     image={`data:image/*;base64,${event?.images?.data}`}
+                    eventState={event.state}
                   />
                 </Grid>
               ))}

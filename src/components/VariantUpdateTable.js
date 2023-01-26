@@ -16,9 +16,14 @@ import useAuth from "../api/hooks/useAuth";
 VariantUpdateTable.propTypes = {
   variantsList: PropTypes.array.isRequired,
   eventId: PropTypes.string.isRequired,
+  eventState: PropTypes.string,
 };
 
-export default function VariantUpdateTable({variantsList, eventId}) {
+VariantUpdateTable.defaultProps = {
+  eventState: "CREATED",
+};
+
+export default function VariantUpdateTable({variantsList, eventId, eventState}) {
   const {auth} = useAuth()
   const [createResult, createLoaded, createError, executeCreate] = useAddVariant();
   const [deleteResult, deleteLoaded, deleteError, executeDelete] = useCancelVariant();
@@ -42,7 +47,7 @@ export default function VariantUpdateTable({variantsList, eventId}) {
   }, [createResult])
 
   useEffect(() => {
-    console.log("deleteResult",deleteResult)
+    console.log("deleteResult", deleteResult)
     if (deleteResult?.status === 200) {
       console.log(deleteResult)
       setVariants(removeObjectFromArray(variants, deleteResult?.data?.cancelledId))
@@ -89,6 +94,10 @@ export default function VariantUpdateTable({variantsList, eventId}) {
     else return isPast(newDate);
   }
 
+  const isActive = eventState === "CREATED";
+  const isCancelled = eventState === "CANCELLED";
+  const isFinished = eventState === "FINISHED";
+
   return (
     <form onSubmit={handleAddVariant}>
       <TableContainer>
@@ -104,72 +113,74 @@ export default function VariantUpdateTable({variantsList, eventId}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            { variants?.lenght !== 0 && variants.map((variant) => (
-              <VariantUpdateTableRow key={variant.id} variant={variant} cancel={handleCancelVariant}/>
+            {variants?.lenght !== 0 && variants.map((variant) => (
+              <VariantUpdateTableRow key={variant.id} variant={variant} cancel={handleCancelVariant} eventState={eventState}/>
             ))}
-            <StyledTableRow>
-              <StyledTableCell component="th" scope="row">
-                <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
-                  <DateTimePicker
+            {!isCancelled &&
+              <StyledTableRow>
+                <StyledTableCell component="th" scope="row">
+                  <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
+                    <DateTimePicker
+                      required
+                      ampm={false}
+                      minutesStep={15}
+                      inputProps={{readOnly: true}}
+                      value={startDate}
+                      onChange={setStartDate}
+                      shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
+                      renderInput={(props) => <TextField required {...props} />}
+                    />
+                  </LocalizationProvider>
+                </StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
+                    <DateTimePicker
+                      required
+                      ampm={false}
+                      minutesStep={15}
+                      value={endDate}
+                      inputProps={{readOnly: true}}
+                      onChange={setEndDate}
+                      shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
+                      renderInput={(props) => <TextField required {...props} />}
+                    />
+                  </LocalizationProvider>
+                </StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  <TextField
                     required
-                    ampm={false}
-                    minutesStep={15}
-                    inputProps={{readOnly: true}}
-                    value={startDate}
-                    onChange={setStartDate}
-                    shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
-                    renderInput={(props) => <TextField required {...props} />}
-                  />
-                </LocalizationProvider>
-              </StyledTableCell>
-              <StyledTableCell component="th" scope="row">
-                <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGb}>
-                  <DateTimePicker
+                    fullWidth
+                    variant="outlined"
+                    placeholder={"Price"}
+                    value={price}
+                    type="number"
+                    inputProps={{min: 1}}
+                    onChange={(e) => setPrice(e.target.value)}/>
+                </StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  <TextField
                     required
-                    ampm={false}
-                    minutesStep={15}
-                    value={endDate}
-                    inputProps={{readOnly: true}}
-                    onChange={setEndDate}
-                    shouldDisableDate={(date) => checkInvalidDates(startOfMinute(date), startOfMinute(new Date()))}
-                    renderInput={(props) => <TextField required {...props} />}
-                  />
-                </LocalizationProvider>
-              </StyledTableCell>
-              <StyledTableCell component="th" scope="row">
-                <TextField
-                  required
-                  fullWidth
-                  variant="outlined"
-                  placeholder={"Price"}
-                  value={price}
-                  type="number"
-                  inputProps={{min: 1}}
-                  onChange={(e) => setPrice(e.target.value)}/>
-              </StyledTableCell>
-              <StyledTableCell component="th" scope="row">
-                <TextField
-                  required
-                  fullWidth
-                  variant="outlined"
-                  placeholder={"Max availability"}
-                  value={numberMax}
-                  type="number"
-                  inputProps={{min: 1}}
-                  onChange={(e) => setNumberMax(e.target.value)}/>
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                <Button
-                  color={"success"}
-                  variant="outlined"
-                  startIcon={<AddIcon/>}
-                  type={"submit"}
-                >
-                  Add
-                </Button>
-              </StyledTableCell>
-              <StyledTableCell/>
-            </StyledTableRow>
+                    fullWidth
+                    variant="outlined"
+                    placeholder={"Max availability"}
+                    value={numberMax}
+                    type="number"
+                    inputProps={{min: 1}}
+                    onChange={(e) => setNumberMax(e.target.value)}/>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Button
+                    color={"success"}
+                    variant="outlined"
+                    startIcon={<AddIcon/>}
+                    type={"submit"}
+                  >
+                    Add
+                  </Button>
+                </StyledTableCell>
+                <StyledTableCell/>
+              </StyledTableRow>
+            }
           </TableBody>
         </Table>
       </TableContainer>

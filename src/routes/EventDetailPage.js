@@ -42,9 +42,12 @@ export default function EventDetailPage() {
   const [orderResult, orderLoaded, orderError, executeOrder] = useOrderVariant();
 
   const [variants, setVariants] = useState([]);
+  const [message, setMessage] = useState("");
+  const [eventState, setEventState] = useState("true");
 
   useEffect(()=> {
     setVariants(event?.data?.variants)
+    setEventState(event?.data?.state)
   }, [eventLoaded])
 
 
@@ -55,6 +58,14 @@ export default function EventDetailPage() {
     }
   }, [orderResult])
 
+  useEffect(()=> {
+    if (cancelResult?.status === 200) {
+      setMessage("Event has been successfully cancelled.")
+      setEventState("CANCELLED");
+      setVariants([])
+    }
+  }, [cancelResult])
+
   const handleOrderVariant = (variantId) => {
     executeOrder(null, {variantId, eventId})
   }
@@ -63,15 +74,18 @@ export default function EventDetailPage() {
     executeCancel(null, {eventId, userId: auth?.user?.id,})
   }
 
-  if (!eventLoaded) {
+  if (!eventLoaded || !variants) {
     return <LinearProgress color="secondary"/>
   }
+
+  const isActive = eventState === "CREATED";
+  const isCancelled = eventState === "CANCELLED";
 
   return (
     <>
       <Box my={2}>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={7}>
+          <Grid item xs={12} sm={7} sx={{filter: isActive ? "none" : "grayscale(100%)", transitionDuration: '500ms'}}>
             <img
               src={`data:image/*;base64,${event?.data?.images?.data}`}
               height={"100%"}
@@ -95,7 +109,7 @@ export default function EventDetailPage() {
                     <EuroSymbolIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={`From ${event.data.variants.reduce((a, b) => a.value < b.value ? a : b).price}€`} />
+                <ListItemText primary={event?.data?.variants.length !==0 ? `From ${event?.data?.variants.reduce((a, b) => a.price < b.price ? a : b).price}€` : "Sorry, no variants available."} />
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -108,22 +122,26 @@ export default function EventDetailPage() {
             </List>
             { auth?.user && (event.data.ownerId === auth?.user?.id) &&
               <Box textAlign="center">
-                <Button
-                  variant="outlined"
-                  startIcon={<ModeEditIcon />}
-                  onClick={() => navigate(`edit`)}
-                  sx={{marginRight: "1em"}}
-                >
-                  Edit
-                </Button>
+                { !isCancelled &&
+                  <Button
+                    variant="outlined"
+                    startIcon={<ModeEditIcon />}
+                    onClick={() => navigate(`edit`)}
+                    sx={{marginRight: "1em"}}
+                  >
+                    Edit
+                  </Button>
+                }
                 <Button
                   color={"error"}
+                  disabled={isCancelled}
                   variant="outlined"
                   startIcon={<DeleteIcon />}
                   onClick={() => handleCancelEvent()}
                 >
-                  Cancel event
+                  {isCancelled ? 'Event is cancelled.' : 'Cancel event.'}
                 </Button>
+                <Typography color="green">{message}</Typography>
               </Box>
             }
           </Grid>
@@ -159,7 +177,7 @@ export default function EventDetailPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {variants?.length &&
+              {variants?.length !== 0 ?
                 variants.sort((a,b) => Date.parse(new Date(a.startDate)) - Date.parse(new Date(b.startDate))).map((variant) => (
                 <StyledTableRow key={variant.id}>
                   <StyledTableCell component="th" scope="row">{`${format(new Date(variant.startDate), 'dd.MM.yyy hh:mm')}`}</StyledTableCell>
@@ -174,7 +192,16 @@ export default function EventDetailPage() {
                     </StyledTableCell>
                   }
                 </StyledTableRow>
-              ))}
+              ))
+              :
+                <StyledTableRow>
+                  <StyledTableCell>No variants.</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </StyledTableRow>
+                  }
             </TableBody>
           </Table>
         </TableContainer>

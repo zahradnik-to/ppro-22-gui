@@ -25,9 +25,14 @@ import {useNavigate} from "react-router-dom";
 VariantUpdateTableRow.propTypes = {
   variant: PropTypes.object.isRequired,
   cancel: PropTypes.func.isRequired,
+  eventState: PropTypes.string,
 };
 
-export default function VariantUpdateTableRow({variant, cancel}) {
+VariantUpdateTableRow.defaultProps = {
+  eventState: "CREATED",
+};
+
+export default function VariantUpdateTableRow({variant, cancel, eventState}) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -46,14 +51,16 @@ export default function VariantUpdateTableRow({variant, cancel}) {
         <StyledTableCell component="th"
                          scope="row">{`${variant.numberAvailable}/${variant.numberMax}`}</StyledTableCell>
         <StyledTableCell align="right">
-          <Button
-            color={"error"}
-            variant="outlined"
-            startIcon={<DeleteIcon/>}
-            onClick={() => cancel(variant.id)}
-          >
-            Cancel
-          </Button>
+          {eventState === "CREATED" &&
+            <Button
+              color={"error"}
+              variant="outlined"
+              startIcon={<DeleteIcon/>}
+              onClick={() => cancel(variant.id)}
+            >
+              Cancel
+            </Button>
+          }
         </StyledTableCell>
         <StyledTableCell>
           {variant?.buyers?.length !== 0 &&

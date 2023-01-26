@@ -17,7 +17,7 @@ export default function EventVariantsUpdatePage() {
     <div>
       <Typography gutterBottom variant='h3' component='h1'>{event?.data?.name} variants</Typography>
       <Typography variant={'h6'} sx={{textDecoration: 'none', color: 'primary.main'}} component={Link} to={`/event/${event?.data?.id}`} gutterBottom>🔙Back to event</Typography>
-      <VariantUpdateTable variantsList={event?.data?.variants} eventId={eventId}/>
+      <VariantUpdateTable variantsList={event?.data?.variants} eventId={eventId} eventState={event?.data?.state}/>
     </div>
   );
 }
