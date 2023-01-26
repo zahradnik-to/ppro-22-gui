@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -30,6 +30,8 @@ import {StyledTableCell, StyledTableRow} from '../components/StyledTable';
 import useAuth from "../api/hooks/useAuth";
 import {useOrderVariant} from "../api/useVariant";
 import React, {useEffect, useState} from "react";
+import axios from "axios";
+import {BASE_URL} from "../api/apiConstants";
 
 
 export default function EventDetailPage() {
@@ -42,14 +44,18 @@ export default function EventDetailPage() {
   const [orderResult, orderLoaded, orderError, executeOrder] = useOrderVariant();
 
   const [variants, setVariants] = useState([]);
-  const [message, setMessage] = useState("");
   const [eventState, setEventState] = useState("true");
+  const [eventOwner, setEventOwner] = useState({});
 
   useEffect(()=> {
+    async function getEventOwner(){
+      const owner = await axios.get("/user/get-by-id", {params: {id: event?.data?.ownerId}, withCredentials: true, baseURL: BASE_URL});
+      setEventOwner(owner.data)
+    }
     setVariants(event?.data?.variants)
     setEventState(event?.data?.state)
+    getEventOwner();
   }, [eventLoaded])
-
 
   useEffect(()=> {
     if (orderResult?.status === 200) {
@@ -60,7 +66,6 @@ export default function EventDetailPage() {
 
   useEffect(()=> {
     if (cancelResult?.status === 200) {
-      setMessage("Event has been successfully cancelled.")
       setEventState("CANCELLED");
       setVariants([])
     }
@@ -101,7 +106,11 @@ export default function EventDetailPage() {
                     <PersonIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={event?.contact?.name || "TODO OWNER USERNAME"}/>
+                <ListItemText>
+                  <Typography component={Link} to={`/user/${eventOwner?.username}`}>
+                    {eventOwner?.username}
+                  </Typography>
+                </ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
@@ -141,7 +150,6 @@ export default function EventDetailPage() {
                 >
                   {isCancelled ? 'Event is cancelled' : 'Cancel event'}
                 </Button>
-                <Typography color="green">{message}</Typography>
               </Box>
             }
           </Grid>
