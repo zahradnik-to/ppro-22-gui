@@ -21,7 +21,7 @@ export function getMockLoginResponse() {
 export function getMockUser() {
   return {
     id: "123456asdf",
-    userName: "mockedJohnDoe",
+    username: "mockedJohnDoe",
     companyName: "John Doe Adventures, Inc.",
     email: "mock@email.com",
     name: "Mock Mockignton",

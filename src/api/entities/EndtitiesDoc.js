@@ -2,15 +2,12 @@
  * @typedef {Object} Event
  * @property {string} id
  * @property {string} name
- * @property {object} contact
- * @property {string} contact.name
- * @property {string} contact.phoneNumber
- * @property {string} descriptionShort
- * @property {string} descriptionLong
+ * @property {string} shortDescription
+ * @property {string} description
  * @property {number} price
  * @property {string} address
- * @property {string} image
- * @property {[Variant]} offeredPackages
+ * @property {object} image
+ * @property {[Variant]} variants
  */
 
 /**
@@ -25,11 +22,11 @@
  * @typedef {Object} User
  * @property {string} id
  * @property {string} name
- * @property {string} companyName
+ * @property {string} surname
  * @property {string} email
  * @property {string} city
  * @property {string} street
  * @property {string} zipCode
  * @property {string} phone
- * @property {Array[{string}]} role
+ * @property {Array[{string}]} roles
  */
