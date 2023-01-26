@@ -19,7 +19,7 @@ export function useGetMyOrders(params) {
 
 export function useListUsers() {
   const request = RequestHandler.User.List
-  return useApiPostRequest(request)
+  return useApiGetRequest(request)
 }
 
 export function useRegisterUser() {
@@ -49,5 +49,10 @@ export function useUpdateUserPassword() {
 
 export function useDeleteUser() {
   const request = RequestHandler.User.Delete;
+  return useApiPostRequest(request)
+}
+
+export function useUpdateRole() {
+  const request = RequestHandler.User.UpdateRole;
   return useApiPostRequest(request)
 }

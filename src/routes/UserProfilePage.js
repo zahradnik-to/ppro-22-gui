@@ -41,10 +41,9 @@ export default function UserProfilePage() {
     return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
 
-  const hasRole = auth?.user?.role?.some(role => ["SELLER", "ADMIN"].includes(role));
-  const hasRole2 = user?.role?.some(role => ["SELLER"].includes(role));
+  const hasRole = auth?.user?.roles?.some(role => ["SELLER", "ADMIN"].includes(role));
+  const hasRole2 = user?.roles?.some(role => ["SELLER"].includes(role));
   const isOwner = auth?.user?.id === user?.id;
-
 
   return (
     <>
@@ -107,13 +106,13 @@ export default function UserProfilePage() {
           </Grid>
         </Grid>
       </Box>
-      { user?.role?.some(role => role === "SELLER") &&
+      { user?.roles?.some(role => role === "SELLER") &&
         <>
           <Divider/>
           <Box my={2}>
             <Box>
               <Typography gutterBottom variant='h4' component='h2'>Offered events
-                {auth?.user?.role?.find(role => role === "SELLER") && (auth?.user?.username === username) &&
+                {auth?.user?.roles?.find(role => role === "SELLER") && (auth?.user?.username === username) &&
                   <Button
                     variant="outlined"
                     startIcon={<AddCircleIcon />}

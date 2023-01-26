@@ -49,7 +49,6 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
   useEffect(() => {
     console.log("deleteResult", deleteResult)
     if (deleteResult?.status === 200) {
-      console.log(deleteResult)
       setVariants(removeObjectFromArray(variants, deleteResult?.data?.cancelledId))
     }
   }, [deleteResult])

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {useLocation, Navigate, Outlet} from 'react-router-dom';
+import {Navigate, Outlet, useLocation} from 'react-router-dom';
 import useAuth from "../api/hooks/useAuth";
 
 /**
@@ -11,7 +11,7 @@ const RequireAuth = ({allowedRoles}) => {
   const location = useLocation();
 
   return(
-    auth?.user?.role?.some(role => allowedRoles?.includes(role))
+    auth?.user?.roles?.some(role => allowedRoles?.includes(role))
       ? <Outlet />
       : auth?.user
         ? <Navigate to={'/unauthorized'} state={{from: location}} replace /> // Used logged but not priviledged

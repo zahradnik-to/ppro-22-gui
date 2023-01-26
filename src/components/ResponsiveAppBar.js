@@ -204,6 +204,15 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{item.name}</Typography>
                   </MenuItem>
                 ))}
+                { auth?.user?.roles?.some(role => role === "ADMIN") &&
+                  <MenuItem
+                    onClick={handleCloseUserMenu}
+                    component={NavLink}
+                    to={"/admin/users"}
+                  >
+                    <Typography textAlign="center">Users</Typography>
+                  </MenuItem>
+                }
                 <LogoutButton handleCloseUserMenu={handleCloseUserMenu}/>
               </Menu>
             </Box>

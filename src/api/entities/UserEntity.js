@@ -1,5 +1,5 @@
 const USER = 'user';
-const USERS = 'userS';
+const USERS = 'users';
 
 const Get = {
   url: `${USER}/get`,
@@ -9,7 +9,7 @@ const Get = {
 
 const List = {
   url: `${USERS}`,
-  method: "post",
+  method: "get",
   withCredentials: true,
 }
 
@@ -40,12 +40,6 @@ const UpdateInfo = {
   },
 }
 
-const UpdateRole = {
-  url: `${USER}/update/role`,
-  method: "put",
-  withCredentials: true,
-}
-
 const MyOrders = {
   url: `${USER}/my-orders`,
   method: "get",
@@ -58,8 +52,14 @@ const UpdatePassword = {
   withCredentials: true
 }
 
+const UpdateRole = {
+  url: `admin/${USER}/update/role`,
+  method: "put",
+  withCredentials: true,
+}
+
 const Delete = {
-  url: `${USER}/delete`,
+  url: `admin/${USER}/delete`,
   method: "delete",
   withCredentials: true,
 }

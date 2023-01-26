@@ -15,6 +15,7 @@ import UserProfileEditPage from "./routes/UserProfileEditPage";
 import UserMyOrdersPage from "./routes/UserMyOrdersPage";
 import UserProfilePage from "./routes/UserProfilePage";
 import EventCreatePage from "./routes/EventCreatePage";
+import AdminUserList from "./routes/AdminUserList";
 
 function App() {
   return (
@@ -39,6 +40,10 @@ function App() {
             <Route path="event/create" element={<EventCreatePage />} />
             <Route path="event/:eventId/edit" element={<EventUpdatePage />} />
             <Route path="event/:eventId/editVariants" element={<EventVariantsUpdatePage />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={["ADMIN"]}/>}>
+            <Route path="/admin/users" element={<AdminUserList />} />
           </Route>
 
           <Route path="unauthorized" element={<ErrorPage errStatus={401} errMessage={"You are not authorized to view this page."} />} />
