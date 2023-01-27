@@ -47,9 +47,8 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
   }, [createResult])
 
   useEffect(() => {
-    console.log("deleteResult", deleteResult)
     if (deleteResult?.status === 200) {
-      setVariants(removeObjectFromArray(variants, deleteResult?.data?.cancelledId))
+      setVariants(variants.map(variant => variant.id === deleteResult?.data?.cancelledId ? {...variant, state: "CANCELLED"} : variant))
     }
   }, [deleteResult])
 
@@ -113,7 +112,7 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
           </TableHead>
           <TableBody>
             {variants?.lenght !== 0 && variants.map((variant) => (
-              <VariantUpdateTableRow key={variant.id} variant={variant} cancel={handleCancelVariant} eventState={eventState}/>
+              <VariantUpdateTableRow key={variant.id} variant={variant} cancel={handleCancelVariant} variantState={eventState}/>
             ))}
             {!isCancelled &&
               <StyledTableRow>

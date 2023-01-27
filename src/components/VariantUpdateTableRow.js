@@ -51,16 +51,34 @@ export default function VariantUpdateTableRow({variant, cancel, eventState}) {
         <StyledTableCell component="th"
                          scope="row">{`${variant.numberAvailable}/${variant.numberMax}`}</StyledTableCell>
         <StyledTableCell align="right">
-          {eventState === "CREATED" &&
-            <Button
-              color={"error"}
-              variant="outlined"
-              startIcon={<DeleteIcon/>}
-              onClick={() => cancel(variant.id)}
-            >
-              Cancel
-            </Button>
-          }
+            {variant.state === "CREATED" &&
+              <Button
+                color={"error"}
+                variant="outlined"
+                startIcon={<DeleteIcon/>}
+                onClick={() => cancel(variant.id)}
+              >
+                Cancel
+              </Button>
+            }
+            {variant.state === "CANCELLED" &&
+              <Button
+                disabled
+                color={"error"}
+                variant="outlined"
+              >
+                Cancelled
+              </Button>
+            }
+            {variant.state === "FINISHED" &&
+              <Button
+                disabled
+                color={"success"}
+                variant="outlined"
+              >
+                Finished
+              </Button>
+            }
         </StyledTableCell>
         <StyledTableCell>
           {variant?.buyers?.length !== 0 &&
