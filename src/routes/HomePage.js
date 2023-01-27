@@ -2,27 +2,46 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import EventCard from "../components/EventCard";
 import Typography from "@mui/material/Typography";
-import {Divider} from "@mui/material";
+import {Divider, LinearProgress} from "@mui/material";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import LoginIcon from '@mui/icons-material/Login';
 import IconButton from "@mui/material/IconButton";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {useListEvents} from "../api/useEvent";
+import {useEffect, useState} from "react";
+import useAuth from "../api/hooks/useAuth";
 
 function HomePage() {
   const navigate = useNavigate();
+  const {auth} = useAuth();
+  const [getEventsResult, getEventsLoaded, getEventsError] = useListEvents({search: ""});
+
+  const [events, setEvents] = useState()
+
+  useEffect(()=> {
+    if (getEventsResult?.status === 200) {
+      const foundEvents = getEventsResult?.data;
+      foundEvents.sort(() => Math.random() - 0.5);
+      setEvents(foundEvents.slice(0,3))
+    }
+  }, [getEventsResult])
 
   const redirectRegister = async () => {
-    navigate("/register");
+    if(!auth?.user) navigate("/userAccess");
   };
 
   const redirectLogin = async () => {
-    navigate("/logIn");
+    if(!auth?.user) navigate("/userAccess");
   };
 
   const redirectToCatalog = async () => {
     navigate("/catalog");
   };
+
+  if (!events) {
+    return <LinearProgress color="secondary"/>
+  }
 
   return (
     <>
@@ -37,14 +56,13 @@ function HomePage() {
           Featured events
         </Typography>
         <Grid container spacing={{xs: 2, md: 3}}>
-          {Array.from(Array(3)).map((_, index) => (
-            <Grid item xs={6} sm={4} md={4} key={index}>
+          {events.map((event) => (
+            <Grid item xs={6} sm={4} md={4} key={"hp-"+event.id}>
               <EventCard
-                id={`${index}`}
-                name={`Featured Event ${index}`}
-                description={"Integer a imperdiet sapien. Ut congue mauris vel nisi mattis, sed dignissim. Nunc magna nisl, rhoncus a tincidunt, interdum et libero."}
-                image={"https://picsum.photos/370/180"}
-                price={Math.floor(Math.random() * 2500 + 150)}
+                id={event.id}
+                name={event.name}
+                description={event.shortDescription}
+                image={`data:image/*;base64,${event?.images?.data}`}
               />
             </Grid>
           ))}

@@ -4,7 +4,6 @@ import {useListEvents} from "../api/useEvent";
 import {LinearProgress} from "@mui/material";
 
 function CatalogPage() {
-
   const [getEventsResult, getEventsLoaded, getEventsError] = useListEvents({search: ""});
 
   if (!getEventsLoaded) {
