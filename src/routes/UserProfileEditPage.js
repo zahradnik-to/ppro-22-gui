@@ -52,14 +52,14 @@ function UserProfileEditPage() {
     e.preventDefault()
     const userUpdate = {
       id: auth.user.id,
-      email: email || getResult?.data?.user?.email,
-      name: name || getResult?.data?.user?.name,
-      surname: surname || getResult?.data?.user?.surname,
-      description: description || getResult?.data?.user?.description,
-      city: city || getResult?.data?.user?.city,
-      street: street || getResult?.data?.user?.street,
-      zipCode: zipCode || getResult?.data?.user?.zipCode,
-      phone: phone || getResult?.data?.user?.phone,
+      email: email || getResult?.data?.email,
+      name: name || getResult?.data?.name,
+      surname: surname || getResult?.data?.surname,
+      description: description || getResult?.data?.description,
+      city: city || getResult?.data?.city,
+      street: street || getResult?.data?.street,
+      zipCode: zipCode || getResult?.data?.zipCode,
+      phone: phone || getResult?.data?.phone,
       image: image || null,
     }
     executeInfoUpdate(userUpdate);
