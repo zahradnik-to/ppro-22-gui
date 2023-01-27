@@ -112,14 +112,16 @@ export default function EventDetailPage() {
                   </Typography>
                 </ListItemText>
               </ListItem>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar sx={{bgcolor: 'secondary.main'}}>
-                    <EuroSymbolIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={event?.data?.variants.length !==0 ? `From ${event?.data?.variants.reduce((a, b) => a.price < b.price ? a : b).price}€` : "Sorry, no variants available."} />
-              </ListItem>
+              { event?.data?.variants.length !==0 &&
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar sx={{bgcolor: 'secondary.main'}}>
+                      <EuroSymbolIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={`From ${event?.data?.variants.reduce((a, b) => a.price < b.price ? a : b).price}€`} />
+                </ListItem>
+              }
               <ListItem>
                 <ListItemAvatar>
                   <Avatar sx={{bgcolor: 'secondary.main'}}>
@@ -194,9 +196,14 @@ export default function EventDetailPage() {
                   <StyledTableCell component="th" scope="row">{`${variant.numberAvailable}/${variant.numberMax}`}</StyledTableCell>
                   {auth?.user &&
                     <StyledTableCell align="right">
-                      <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleOrderVariant(variant.id)}>
-                        Order
-                      </Button>
+                      { variant.numberAvailable > 0
+                        ? <Button variant="outlined" startIcon={<ShoppingBasketIcon />} onClick={() => handleOrderVariant(variant.id)}>
+                            Order
+                          </Button>
+                        : <Button variant="outlined" disabled>
+                            Sold-out
+                          </Button>
+                      }
                     </StyledTableCell>
                   }
                 </StyledTableRow>

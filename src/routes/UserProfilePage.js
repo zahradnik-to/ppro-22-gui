@@ -19,6 +19,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PhoneIcon from '@mui/icons-material/Phone';
 import InfoIcon from '@mui/icons-material/Info';
+import PlaceIcon from '@mui/icons-material/Place';
 import {useGetUser} from "../api/useUser";
 import EventCard from "../components/EventCard";
 import ErrorPage from "./ErrorPage";
@@ -40,10 +41,6 @@ export default function UserProfilePage() {
   if (Object.keys(user).length === 0){
     return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
-
-  const hasRole = auth?.user?.roles?.some(role => ["SELLER", "ADMIN"].includes(role));
-  const hasRole2 = user?.roles?.some(role => ["SELLER"].includes(role));
-  const isOwner = auth?.user?.id === user?.id;
 
   return (
     <>
@@ -82,7 +79,17 @@ export default function UserProfilePage() {
                     <PhoneIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={getUserResult?.data?.phone || "TODO PHONE"}/>
+                <ListItemText primary={getUserResult?.data?.phone}/>
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar sx={{bgcolor: 'secondary.main'}}>
+                    <PlaceIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText>
+                  {`${getUserResult?.data?.street} ${getUserResult?.data?.city} ${getUserResult?.data?.zipCode}`}
+                </ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemAvatar>
