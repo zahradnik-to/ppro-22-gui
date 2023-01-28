@@ -62,7 +62,7 @@ export default function EventUpdatePage() {
         <TextField sx={{my: 2}} fullWidth variant="outlined" label="Short description" defaultValue={event.shortDescription} multiline minRows={1} onChange={(e) => setShortDescription(e.target.value)}/>
         <TextField sx={{my: 2}} fullWidth variant="outlined" label="Description" defaultValue={event.description} multiline minRows={3} onChange={(e) => setDescription(e.target.value)}/>
         <Box display={"flex"} justifyContent={"flex-end"} alignItems={"center"} sx={{justifyContent:"space-between"}}>
-          <Typography variant={'h6'} color={message.color}>{message.text}</Typography>
+          <Typography variant={'h6'} component={'span'} color={message.color}>{message.text}</Typography>
           <Button variant="contained" type={"submit"}>Submit!</Button>
         </Box>
       </form>

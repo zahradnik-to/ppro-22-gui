@@ -1,4 +1,12 @@
-import {Button, Table, TableBody, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
+} from "@mui/material";
 import {StyledTableCell, StyledTableRow} from "./StyledTable";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
@@ -12,6 +20,7 @@ import {useAddVariant, useCancelVariant} from "../api/useVariant";
 import React, {useEffect, useState} from "react";
 import VariantUpdateTableRow from "./VariantUpdateTableRow";
 import useAuth from "../api/hooks/useAuth";
+import {isBefore} from 'date-fns'
 
 VariantUpdateTable.propTypes = {
   variantsList: PropTypes.array.isRequired,
@@ -28,12 +37,12 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
   const [createResult, createLoaded, createError, executeCreate] = useAddVariant();
   const [deleteResult, deleteLoaded, deleteError, executeDelete] = useCancelVariant();
 
-
   const [variants, setVariants] = useState([])
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [price, setPrice] = useState("");
   const [numberMax, setNumberMax] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setVariants(variantsList);
@@ -52,15 +61,6 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
     }
   }, [deleteResult])
 
-  const removeObjectFromArray = (arr, variantId) => {
-    const arrCopy = Array.from(arr);
-    const objWithIdIndex = arrCopy.findIndex((obj) => obj.id === variantId);
-    if (objWithIdIndex > -1) {
-      arrCopy.splice(objWithIdIndex, 1);
-    }
-    return arrCopy;
-  }
-
   const resetNewVariantFields = () => {
     setStartDate(null);
     setEndDate(null);
@@ -70,6 +70,10 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
 
   const handleAddVariant = (e) => {
     e.preventDefault()
+    if (!isStartBeforeEnd()) {
+      setErrorMessage("End date cannot be before start date.")
+      return;
+    }
     const newVariant = {
       sellerId: auth.user.id,
       startDate: new Date(startDate).toISOString(),
@@ -78,7 +82,11 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
       price,
       numberMax,
     }
-    executeCreate(newVariant)
+    // executeCreate(newVariant)
+  }
+
+  const isStartBeforeEnd = () => {
+    return isBefore(new Date(startDate), new Date(endDate))
   }
 
   const handleCancelVariant = (variantId) => {
@@ -182,6 +190,7 @@ export default function VariantUpdateTable({variantsList, eventId, eventState}) 
           </TableBody>
         </Table>
       </TableContainer>
+      <Typography variant={'h6'} component={'span'} color="red">{errorMessage}</Typography>
     </form>
   )
 }

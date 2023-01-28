@@ -39,22 +39,24 @@ export default function EventDetailPage() {
   const {eventId} = useParams();
   const navigate = useNavigate();
 
-  const [event, eventLoaded, error] = useGetEvent({eventId});
+  const [event, eventLoaded] = useGetEvent({eventId});
   const [cancelResult, cancelLoaded, cancelError, executeCancel] = useCancelEvent();
   const [orderResult, orderLoaded, orderError, executeOrder] = useOrderVariant();
 
   const [variants, setVariants] = useState([]);
-  const [eventState, setEventState] = useState("true");
+  const [eventState, setEventState] = useState("CREATED");
   const [eventOwner, setEventOwner] = useState({});
 
   useEffect(()=> {
+    if (!eventLoaded) return
     async function getEventOwner(){
       const owner = await axios.get("/user/get-by-id", {params: {id: event?.data?.ownerId}, withCredentials: true, baseURL: BASE_URL});
       setEventOwner(owner.data)
     }
     setVariants(event?.data?.variants)
     setEventState(event?.data?.state)
-    getEventOwner();
+    getEventOwner()
+    .catch(e => console.error(e) );
   }, [eventLoaded])
 
   useEffect(()=> {
@@ -79,7 +81,7 @@ export default function EventDetailPage() {
     executeCancel(null, {eventId, userId: auth?.user?.id,})
   }
 
-  if (!eventLoaded || !variants) {
+  if (!eventLoaded || !variants || !eventOwner) {
     return <LinearProgress color="secondary"/>
   }
 

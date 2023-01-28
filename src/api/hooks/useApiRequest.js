@@ -2,8 +2,6 @@ import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from '../apiConstants';
 
-// Docs for Request config can be found here: https://axios-http.com/docs/req_config
-
 /**
  * Hook for calling get requests on api. Fetches data on page load.
  * @param request Axios request config.
@@ -11,13 +9,12 @@ import {BASE_URL} from '../apiConstants';
  */
 export function useApiGetRequest(request){
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null); // Todo get rid of error? Check for errors only in response?
+  const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    console.log("useApiGetRequest", request)
     callApi(request, setResult, setError, setLoaded)
-      .catch((e) => console.log("Error during get call",e))
+      .catch((e) => setError(e))
   }, [request]);
 
   return [result, loaded, error, setResult];
@@ -40,7 +37,6 @@ export function useApiPostRequest(request) {
       request.data = data
     }
     if (params) request.params = params;
-    console.log("useApiPostRequest", request)
     return callApi(request, setResult, setError, setLoaded)
   }, [])
 
@@ -53,10 +49,8 @@ async function callApi(request, setResult, setError, setLoaded) {
   let error = null;
   try {
     result = await axios(request);
-    console.log(`${request.url} RESULT: `, result)
   } catch (err) {
     error = err;
-    console.log(`${request.url} ERROR: `, err)
   } finally {
     setResult(result)
     setError(error)

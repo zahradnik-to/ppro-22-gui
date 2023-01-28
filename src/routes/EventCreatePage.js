@@ -29,7 +29,6 @@ export default function EventCreatePage() {
     if (createResult?.status === 200) {
       setMessage({color: "green", text: "Event successfully created."})
     }
-    console.log(createResult)
   }, [createResult])
 
   const handleSubmit = (e) => {
@@ -50,7 +49,6 @@ export default function EventCreatePage() {
       endDate,
       numberMax,
     }
-    console.log(createdEvent)
     executeCreate(createdEvent);
   }
 

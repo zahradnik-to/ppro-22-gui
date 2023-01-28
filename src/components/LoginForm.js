@@ -49,7 +49,7 @@ export default function LoginForm({handleLogin, message}) {
             required
           />
           <Button variant="contained" type="submit">Log In</Button>
-          <Typography variant={'h6'} color={message.color}>{message.text}</Typography>
+          <Typography variant={'h6'} component={'span'} color={message.color}>{message.text}</Typography>
         </Stack>
       </form>
     </Box>

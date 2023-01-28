@@ -21,13 +21,12 @@ export default function UserAccessPage() {
     if (registerResult?.status === 200 && registerResult?.data) {
       setRegMsg({
         color: 'green',
-        text: 'Registration successful. Please login.'
+        text: 'Registration successful. You can now log in.'
       })
     }
   }, [registerResult])
 
   useEffect(() => {
-    console.log(loginResult)
     if (loginResult?.status === 200) {
       setAuth({user: loginResult?.data});
       navigate(from, {replace: true})
@@ -47,8 +46,8 @@ export default function UserAccessPage() {
     executeRegister(newUser)
       .catch((e) => {
         const text = e?.response?.data?.message;
-        if (text) setLogMsg({color: "red", text })
-        else setLogMsg({color: "red", text: "Unexpected error occurred."})
+        if (text) setRegMsg({color: "red", text })
+        else setRegMsg({color: "red", text: "Unexpected error occurred."})
       })
   };
 

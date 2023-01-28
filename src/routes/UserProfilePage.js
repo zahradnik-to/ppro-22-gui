@@ -24,6 +24,7 @@ import {useGetUser} from "../api/useUser";
 import EventCard from "../components/EventCard";
 import ErrorPage from "./ErrorPage";
 import useAuth from "../api/hooks/useAuth";
+import React from "react";
 
 
 export default function UserProfilePage() {
@@ -38,12 +39,12 @@ export default function UserProfilePage() {
   }
 
   const user = getUserResult?.data;
-  if (Object.keys(user).length === 0){
+  if (user && Object.keys(user).length === 0){
     return <ErrorPage errStatus={404} errMessage={"Requested page does not exist 😭"} />
   }
 
   return (
-    <>
+    <React.Fragment key={user.id}>
       <Box my={2}>
         <Typography gutterBottom variant='h4' component='h1'>{getUserResult?.data?.username} profile</Typography>
         <Grid container spacing={3}>
@@ -147,6 +148,6 @@ export default function UserProfilePage() {
           </Box>
         </>
       }
-    </>
+    </React.Fragment>
   );
 }

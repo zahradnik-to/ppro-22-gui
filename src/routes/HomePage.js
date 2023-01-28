@@ -71,17 +71,10 @@ function HomePage() {
       <Divider variant="middle"/>
       <Box my={2}>
         <Typography gutterBottom variant="h5" component="h2">
-          Get the most out of PPROMAT
+          Start using PPROMAT now!
         </Typography>
-        <Grid
-          container
-          spacing={0}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid item xs/>
-          <Grid item xs justifyContent={"center"}>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={4}>
             <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <Box component={'div'}>
                 <IconButton
@@ -100,7 +93,7 @@ function HomePage() {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs>
+          <Grid item xs={12} sm={4}>
             <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <Box component={'div'}>
                 <IconButton
@@ -119,7 +112,7 @@ function HomePage() {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs>
+          <Grid item xs={12} sm={4}>
             <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
               <Box component={'div'}>
                 <IconButton
@@ -138,7 +131,6 @@ function HomePage() {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs/>
         </Grid>
       </Box>
     </>

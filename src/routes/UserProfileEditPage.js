@@ -31,8 +31,6 @@ function UserProfileEditPage() {
   useEffect(() => {
     if (infoUpdateResult?.status === 200) {
       setInfoErrorMessage({color: "green", text: "Information changed!"})
-    } else if (infoUpdateError) {
-      setInfoErrorMessage({color: "red", text: "Something went wrong!"})
     }
   }, [infoUpdateResult])
 
@@ -62,7 +60,12 @@ function UserProfileEditPage() {
       phone: phone || getResult?.data?.phone,
       image: image || null,
     }
-    executeInfoUpdate(userUpdate);
+    executeInfoUpdate(userUpdate)
+    .catch((e) => {
+      const text = e?.response?.data?.message;
+      if (text) setInfoErrorMessage({color: "red", text })
+      else setInfoErrorMessage({color: "red", text: "Unexpected error occurred."})
+    })
   }
 
   const handleImageChange = (newImage) => {
@@ -78,6 +81,11 @@ function UserProfileEditPage() {
       newPasswordConfirmation,
     }
     executePwsUpdate(passwordUpdate)
+    .catch((e) => {
+      const text = e?.response?.data?.message;
+      if (text) setPswErrorMessage({color: "red", text })
+      else setPswErrorMessage({color: "red", text: "Unexpected error occurred."})
+    })
   }
 
   return (
